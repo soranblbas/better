@@ -1,0 +1,130 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+    <br>
+    <br> <br>
+    <style>
+        table, th, td {
+            border: 0.5px solid;
+
+        }
+
+        {#@media print {#}
+        {#    table.table tfoot {#}
+        {#        display: table-row-group;#}
+        {#    }#}
+
+        #}#}
+
+    </style>
+  <h2 class="text-center"> ملخص المبيعات </h2>
+    <table id="example5" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+
+        <tr>
+
+            <th>اسم العميل</th>
+            <th>رقم الوصل</th>
+            <th>اسم المادة</th>
+            <th>السعر</th>
+            <th>العدد</th>
+            <th>المجموع</th>
+            <th>الحالة</th>
+            <th>التاريخ</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in  cc_balance_report %}
+
+            <tr>
+                <td>{{ i.sales_invoice.customer_name }}</td>
+                <td>{{ i.sales_invoice.invoice_number }}</td>
+
+                <td>{{ i.item }}</td>
+                <td>{{ i.item_price }}</td>
+                <td>{{ i.qty }}</td>
+                <td>{{ i.total_amt }}</td>
+                <td>{{ i.sales_invoice.piad }}</td>
+                <td>{{ i.sales_invoice.date }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+
+        <th></th>
+
+        <th></th>
+        <th></th>
+        <th style="background-color: #beecc8"></th>
+        <th style="background-color: #e8c3c7"></th>
+
+        <th style="background-color: #c9d9ee"></th>
+
+        <th></th>
+        <th></th>
+
+        </tfoot>
+
+
+    </table>
+
+
+   <h2 class="text-center"> ملخص التسديدات </h2>
+    <table id="example6" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+
+        <tr>
+
+            <th>اسم العميل</th>
+            <th>رقم الوصل</th>
+            <th>رقم الوصل المبیعات</th>
+            <th>المجموع</th>
+
+
+            <th>الملاحضة</th>
+            <th>التاريخ</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in bb_report %}
+
+            <tr>
+                <td>{{ i.customer_name }}</td>
+                <td>{{ i.invoice_number }}</td>
+                <td>{{ i.sales_invoice.invoice_number }}</td>
+                <td>{{ i.paid_amount }}</td>
+                <td>{{ i.note }}</td>
+                <td>{{ i.payment_date }}</td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+
+        <th></th>
+
+        <th></th>
+        <th></th>
+        <th style="background-color: #beecc8"></th>
+        <th></th>
+
+        <th></th>
+
+
+        </tfoot>
+
+
+    </table>
+
+
+
+{% endblock %}

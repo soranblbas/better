@@ -1,0 +1,234 @@
+{% extends 'core/base.html' %}
+{% block content %}
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+            <h1>Dashboard</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+
+        <section class="section dashboard">
+            <div class="row">
+
+                <!-- Left side columns -->
+                <div class="col-lg-8">
+                    <div class="row">
+
+                        <!-- Sales Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card sales-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">المبيعات<br></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-cart"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <a href="{{ 'sales_report' }}"><h6 dir="rtl">{{ t_sale_invoice }} وصل</h6>
+                                            </a>
+                                            <span class="text-success small pt-1 fw-bold">${{ t_sale.total_amt__sum }}</span>
+                                            <span
+                                                    class="text-muted small pt-2 ps-1">Amount</span>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div><!-- End Sales Card -->
+
+                        <!-- Revenue Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card purchase-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">المشتريات<br></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <a href="{{ 'purchase_report' }}"><h6 dir="rtl">{{ t_purchase }} وصل</h6>
+                                            </a>
+                                            <span class="text-success small pt-1 fw-bold">${{ t_p_sale.total_amt__sum }} </span>
+                                            <span
+                                                    class="text-muted small pt-2 ps-1">Amount</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Revenue Card -->
+
+                        <!-- Revenue Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">التسديدات<br></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <a href="{{ 'payment_report' }}"><h6 dir="rtl">{{ t_payment }} وصل</h6>
+                                            </a>
+                                            <span class="text-success small pt-1 fw-bold">8%</span> <span
+                                                class="text-muted small pt-2 ps-1">increase</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Revenue Card -->
+
+                        <!-- Revenue Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">المحزن<br></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <a href="{{ 'stock_report' }}"><h6 dir="rtl">{{ t_payment }} وصل</h6>
+                                            </a>
+                                            <span class="text-success small pt-1 fw-bold">8%</span> <span
+                                                class="text-muted small pt-2 ps-1">increase</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Revenue Card -->
+
+                        <!-- Revenue Card -->
+{#                        <div class="col-xxl-4 col-md-6">#}
+{#                            <div class="card info-card revenue-card">#}
+{##}
+{##}
+{#                                <div class="card-body">#}
+{#                                    <h5 class="card-title">العملاء<br></h5>#}
+{##}
+{#                                    <div class="d-flex align-items-center">#}
+{#                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">#}
+{#                                            <i class="bi bi-currency-dollar"></i>#}
+{#                                        </div>#}
+{#                                        <div class="ps-3">#}
+{#                                            <a href="{{ 'customer_balance' }}"><h6 dir="rtl">كشف الحساب للعملاء</h6>#}
+{#                                            </a>#}
+{#                                            <span class="text-success small pt-1 fw-bold">8%</span> <span#}
+{#                                                class="text-muted small pt-2 ps-1">increase</span>#}
+{##}
+{#                                        </div>#}
+{#                                    </div>#}
+{#                                </div>#}
+{##}
+{#                            </div>#}
+{#                        </div><!-- End Revenue Card -->#}
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">العملاء<br></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <a href="{{ 'total_customer_summary_report' }}"><h6 dir="rtl">ملخص كشف العملاء
+</h6>
+                                            </a>
+                                            <span class="text-success small pt-1 fw-bold"></span> <span
+                                                class="text-muted small pt-2 ps-1"></span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Revenue Card -->
+                        <!-- Revenue Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">النضام<br></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <a href="admin"><h6>الحسابات </h6></a>
+                                            <span class="text-success small pt-1 fw-bold">8%</span> <span></span>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Revenue Card -->
+
+                        <!-- Customers Card -->
+                        {#                        <div class="col-xxl-4 col-md-6">#}
+                        {##}
+                        {#                            <div class="card info-card customers-card">#}
+                        {##}
+                        {##}
+                        {#                                <div class="card-body">#}
+                        {#                                    <h5 class="card-title">Customers <span>| This Year</span></h5>#}
+                        {##}
+                        {#                                    <div class="d-flex align-items-center">#}
+                        {#                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">#}
+                        {#                                            <i class="bi bi-people"></i>#}
+                        {#                                        </div>#}
+                        {#                                        <div class="ps-3">#}
+                        {#                                            <h6>Customers {{ t_customer }}</h6>#}
+                        {#                                            <span class="text-danger small pt-1 fw-bold">12%</span> <span#}
+                        {#                                                class="text-muted small pt-2 ps-1">decrease</span>#}
+                        {##}
+                        {#                                        </div>#}
+                        {#                                    </div>#}
+                        {##}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {##}
+                        {#                        </div><!-- End Customers Card -->#}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+    </main><!-- End #main -->
+
+
+
+{% endblock %}

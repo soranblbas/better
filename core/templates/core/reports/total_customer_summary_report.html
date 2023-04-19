@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+    <br>
+    <br> <br>
+    <style>
+        table, th, td {
+            border: 0.5px solid;
+
+        }
+
+        {#@media print {#}
+        {#    table.table tfoot {#}
+        {#        display: table-row-group;#}
+        {#    }#}
+
+        #}#}
+
+    </style>
+
+    <h2> ملخص كشف العملاء</h2>
+    <table id="example7" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+
+        <tr>
+
+            <th>اسم العميل</th>
+            <th>المبيعات</th>
+            <th>التسديدات</th>
+            <th> الرصيد قبل الدفعة الأخيرة</th>
+            <th> اخر‌التسديدات</th>
+            <th>المتبقي</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for customer, data in c_balance_report.items %}
+            <tr>
+                <td>{{ customer }}</td>
+                <td>{{ data.total_invoice_amount }}</td>
+                <td>{{ data.total_paid_amount }}</td>
+                <td>{{ data.balance_before_last_payment }}</td>
+                <td>{{ data.last_payment }}</td>
+                <td>{{ data.actual_credit }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+
+        <th></th>
+
+        <th style="background-color: #beecc8"></th>
+        <th style="background-color: #beecc8"></th>
+
+        <th style="background-color: #e8c3c7"></th>
+           <th style="background-color: #e8c3c7"></th>
+
+
+        </tfoot>
+
+
+    </table>
+
+
+
+{% endblock %}

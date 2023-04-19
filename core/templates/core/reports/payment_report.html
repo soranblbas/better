@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+    <br>
+    <br> <br>
+    <style>
+        table, th, td {
+            border: 0.5px solid;
+
+        }
+
+        {#@media print {#}
+        {#    table.table tfoot {#}
+        {#        display: table-row-group;#}
+        {#    }#}
+
+        #}#}
+
+    </style>
+
+    <form class="form-a">
+
+
+        From: <input type="date" value={{ myFilter.form.max_date }}</input>
+        To: <input type="date" value={{ myFilter.form.min_date }}</input>
+        <button type="submit" class="btn btn-b">Search</button>
+
+
+    </form>
+    <h2 class="text-center"> ملخص التسديدات </h2>
+    <table id="example2" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+
+        <tr>
+
+            <th>اسم العميل</th>
+            <th>رقم الوصل</th>
+            <th>رقم الوصل المبیعات</th>
+            <th>نسبە الدفع</th>
+            <th>التاريخ</th>
+            <th>الملاحضة</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in  payment_report %}
+
+            <tr>
+                <td>{{ i.customer_name }}</td>
+                <td>{{ i.invoice_number }}</td>
+                <td>{{ i.sales_invoice }}</td>
+                <td>{{ i.paid_amount }}</td>
+                <td>{{ i.payment_date }}</td>
+                <td>{{ i.note }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+
+        <th></th>
+        <th></th>
+  <th></th>
+        <th style="background-color: #e8c3c7"></th>
+
+        <th></th>
+        <th></th>
+
+
+        </tfoot>
+
+
+    </table>
+
+
+{% endblock %}
+

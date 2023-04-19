@@ -1,0 +1,419 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+{% include 'core/head.html' %}
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+        <a href="{% url 'index' %}" class="logo d-flex align-items-center">
+            <img src="{% static 'core/assets/img/logo.png' %}" alt="">
+            <span class="d-none d-lg-block">Better Cooking</span>
+        </a>
+        {#        <i class="bi bi-list toggle-sidebar-btn"></i>#}
+    </div><!-- End Logo -->
+    <a style="color: #0a58ca" href="{% url 'logout' %}">Logout</a>
+
+</header><!-- End Header -->
+
+<div class=" container-fluid">
+
+    {% block content %}
+
+    {% endblock %}
+
+</div>
+
+
+<!-- ======= Footer ======= -->
+{% include 'core/footer.html' %}
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script src="{% static 'core/assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+<script src="{% static 'core/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/assets/vendor/chart.js/chart.umd.js' %}"></script>
+<script src="{% static 'core/assets/vendor/echarts/echarts.min.js' %}"></script>
+<script src="{% static 'core/assets/vendor/quill/quill.min.js' %}"></script>
+<script src="{% static 'core/assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+<script src="{% static 'core/assets/vendor/tinymce/tinymce.min.js' %}"></script>
+<script src="{% static 'core/assets/vendor/php-email-form/validate.js' %}"></script>
+
+<!-- Template Main JS File -->
+<script src="{% static 'core/assets/js/main.js' %}"></script>
+
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.11.5/api/sum().js"></script>
+
+
+<script rel="stylesheet" type="text/css"
+        src="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css"></script>
+<script rel="stylesheet" type="text/css"
+        src="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css"></script>
+
+
+{#<script src="https://code.jquery.com/jquery-3.5.1.js"></script>#}
+{#<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>#}
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+<script src="https://cdn.datatables.net/datetime/1.2.0/js/dataTables.dateTime.min.js"></script>
+<script src=""></script>
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+
+        $('#example1').DataTable({
+
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    footer: true,
+                    title: '<center><p>كشف الحساب المبيعات</p></center>',
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+
+            drawCallback: function () {
+                var api = this.api();
+                var sum = 0;
+                var formated = 0;
+                //to show first th
+                $(api.column(0).footer()).html('Total');
+
+                for (var i = 4; i <= 6; i++) {
+                    sum = api.column(i, {page: 'current'}).data().sum();
+
+                    //to format this sum
+                    formated = parseFloat(sum).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    $(api.column(i).footer()).html('' + formated);
+                }
+
+            },
+            columnDefs: [
+                //{targets: 0, visible:false},
+                {
+                    targets: 1, className: "my-class"
+                }
+            ],
+        });
+
+        $('#example2').DataTable({
+
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    footer: true,
+                    title: '<center><p>كشف التسديدات </p></center>',
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+
+            drawCallback: function () {
+                var api = this.api();
+                var sum = 0;
+                var formated = 0;
+                //to show first th
+                $(api.column(0).footer()).html('Total');
+
+                for (var i = 3; i <= 3; i++) {
+                    sum = api.column(i, {page: 'current'}).data().sum();
+
+                    //to format this sum
+                    formated = parseFloat(sum).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    $(api.column(i).footer()).html('' + formated);
+                }
+
+            },
+            columnDefs: [
+                //{targets: 0, visible:false},
+                {
+                    targets: 1, className: "my-class"
+                }
+            ],
+        });
+        $('#example3').DataTable({
+
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    footer: true,
+                    title: '<center><p>كشف الحساب المشتريات </p></center>',
+
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+
+            drawCallback: function () {
+                var api = this.api();
+                var sum = 0;
+                var formated = 0;
+                //to show first th
+                $(api.column(0).footer()).html('Total');
+
+                for (var i = 3; i <= 5; i++) {
+                    sum = api.column(i, {page: 'current'}).data().sum();
+
+                    //to format this sum
+                    formated = parseFloat(sum).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    $(api.column(i).footer()).html('' + formated);
+                }
+
+            },
+            columnDefs: [
+                //{targets: 0, visible:false},
+                {
+                    targets: 1, className: "my-class"
+                }
+            ],
+        });
+        $('#example4').DataTable({
+
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    footer: true,
+                    title: '<center><p>كشف الحساب المشتريات </p></center>',
+
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+
+            drawCallback: function () {
+                var api = this.api();
+                var sum = 0;
+                var formated = 0;
+                //to show first th
+                $(api.column(0).footer()).html('Total');
+
+                for (var i = 1; i <= 3; i += 2) {
+                    sum = api.column(i, {page: 'current'}).data().sum();
+
+                    //to format this sum
+                    formated = parseFloat(sum).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    $(api.column(i).footer()).html('' + formated);
+                }
+
+            },
+            columnDefs: [
+                //{targets: 0, visible:false},
+                {
+                    targets: 1, className: "my-class"
+                }
+            ],
+        });
+        $('#example5').DataTable({
+
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    footer: true,
+                    title: '<center><p>كشف الحساب المشتريات للعملاء</p></center>',
+
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+
+            drawCallback: function () {
+                var api = this.api();
+                var sum = 0;
+                var formated = 0;
+                //to show first th
+                $(api.column(0).footer()).html('Total');
+
+                for (var i = 3; i <= 5; i++) {
+                    sum = api.column(i, {page: 'current'}).data().sum();
+
+                    //to format this sum
+                    formated = parseFloat(sum).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    $(api.column(i).footer()).html('' + formated);
+                }
+
+            },
+            columnDefs: [
+                //{targets: 0, visible:false},
+                {
+                    targets: 1, className: "my-class"
+                }
+            ],
+        });
+        $('#example6').DataTable({
+
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    footer: true,
+                    title: '<center><p>كشف الحساب التسديدات للعملاء</p></center>',
+
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+
+            drawCallback: function () {
+                var api = this.api();
+                var sum = 0;
+                var formated = 0;
+                //to show first th
+                $(api.column(0).footer()).html('Total');
+
+                for (var i = 3; i <= 3; i++) {
+                    sum = api.column(i, {page: 'current'}).data().sum();
+
+                    //to format this sum
+                    formated = parseFloat(sum).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    $(api.column(i).footer()).html('' + formated);
+                }
+
+            },
+            columnDefs: [
+                //{targets: 0, visible:false},
+                {
+                    targets: 1, className: "my-class"
+                }
+            ],
+        });
+
+        $('#example7').DataTable({
+
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+                    footer: true,
+                    title: '<center><p> ملخص كشف العملاء</p></center>',
+
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css('font-size', '10pt')
+                            .prepend(
+                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }
+            ],
+
+
+            drawCallback: function () {
+                var api = this.api();
+                var sum = 0;
+                var formated = 0;
+                //to show first th
+                $(api.column(0).footer()).html('Total');
+
+                for (var i = 1; i <= 3; i++) {
+                    sum = api.column(i, {page: 'current'}).data().sum();
+
+                    //to format this sum
+                    formated = parseFloat(sum).toLocaleString(undefined, {minimumFractionDigits: 2});
+                    $(api.column(i).footer()).html('' + formated);
+                }
+
+            },
+            columnDefs: [
+                //{targets: 0, visible:false},
+                {
+                    targets: 1, className: "my-class"
+                }
+            ],
+        });
+    });
+
+
+</script>
+
+</body>
+
+</html>

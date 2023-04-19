@@ -1,0 +1,86 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+    <br>
+    <br> <br>
+    <style>
+        table, th, td {
+            border: 0.5px solid;
+
+        }
+
+        {#@media print {#}
+        {#    table.table tfoot {#}
+        {#        display: table-row-group;#}
+        {#    }#}
+
+        #}#}
+
+    </style>
+
+    <form class="form-a">
+
+
+        From: <input type="date" value={{ myFilter.form.max_date }}</input>
+        To: <input type="date" value={{ myFilter.form.min_date }}</input>
+        <button type="submit" class="btn btn-b">Search</button>
+
+
+    </form>
+    <h2 class="text-center"> ملخص المبيعات </h2>
+    <table id="example1" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+
+        <tr>
+
+
+            <th>رقم الوصل</th>
+            <th>اسم العميل</th>
+            <th>الحالة</th>
+            <th>اسم المادة</th>
+            <th>السعر</th>
+            <th>العدد</th>
+            <th>المجموع</th>
+            <th>التاريخ</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in  s_reports %}
+
+            <tr>
+                <td>{{ i.sales_invoice.invoice_number }}</td>
+                <td>{{ i.sales_invoice.customer_name }}</td>
+                <td>{{ i.sales_invoice.status }}</td>
+                <td>{{ i.item }}</td>
+                <td>{{ i.item.price }}</td>
+                <td>{{ i.qty }}</td>
+                <td>{{ i.total_amt }}</td>
+                <td>{{ i.sale_date }}</td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th style="background-color: #e8c3c7"></th>
+        <th style="background-color: #beecc8"></th>
+        <th style="background-color: #c9d9ee"></th>
+        <th></th>
+
+
+        </tfoot>
+
+
+    </table>
+
+
+{% endblock %}
