@@ -89,8 +89,9 @@
                                         <div class="ps-3">
                                             <a href="{{ 'payment_report' }}"><h6 dir="rtl">{{ t_payment }} وصل</h6>
                                             </a>
-                                            <span class="text-success small pt-1 fw-bold">8%</span> <span
-                                                class="text-muted small pt-2 ps-1">increase</span>
+                                            <span class="text-success small pt-1 fw-bold">${{ t_total_payment.paid_amount__sum }} </span>
+                                            <span
+                                                    class="text-muted small pt-2 ps-1">Amount</span>
 
                                         </div>
                                     </div>
@@ -100,6 +101,29 @@
                         </div><!-- End Revenue Card -->
 
                         <!-- Revenue Card -->
+                        <div class="col-xxl-4 col-md-6">
+                            <div class="card info-card revenue-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">ملخص المحزن<br></h5>
+
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                           <span class="bi bi-graph-up"></span>
+                                        </div>
+                                        <div class="ps-3">
+                                            <a href="{{ 'item-balance' }}"><h6 dir="rtl"> ملخص المحزن </h6>
+                                            </a>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div><!-- End Revenue Card -->
+
                         <div class="col-xxl-4 col-md-6">
                             <div class="card info-card revenue-card">
 
@@ -112,10 +136,11 @@
                                             <i class="bi bi-currency-dollar"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <a href="{{ 'stock_report' }}"><h6 dir="rtl">{{ t_payment }} وصل</h6>
+                                            <a href="{{ 'stock_report' }}"><h6 dir="rtl">{{ t_purchase }} وصل</h6>
                                             </a>
-                                            <span class="text-success small pt-1 fw-bold">8%</span> <span
-                                                class="text-muted small pt-2 ps-1">increase</span>
+                                            <span class="text-success small pt-1 fw-bold">${{ t_p_sale.total_amt__sum }} </span>
+                                            <span
+                                                    class="text-muted small pt-2 ps-1">Amount</span>
 
                                         </div>
                                     </div>
@@ -123,31 +148,30 @@
 
                             </div>
                         </div><!-- End Revenue Card -->
-
                         <!-- Revenue Card -->
-{#                        <div class="col-xxl-4 col-md-6">#}
-{#                            <div class="card info-card revenue-card">#}
-{##}
-{##}
-{#                                <div class="card-body">#}
-{#                                    <h5 class="card-title">العملاء<br></h5>#}
-{##}
-{#                                    <div class="d-flex align-items-center">#}
-{#                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">#}
-{#                                            <i class="bi bi-currency-dollar"></i>#}
-{#                                        </div>#}
-{#                                        <div class="ps-3">#}
-{#                                            <a href="{{ 'customer_balance' }}"><h6 dir="rtl">كشف الحساب للعملاء</h6>#}
-{#                                            </a>#}
-{#                                            <span class="text-success small pt-1 fw-bold">8%</span> <span#}
-{#                                                class="text-muted small pt-2 ps-1">increase</span>#}
-{##}
-{#                                        </div>#}
-{#                                    </div>#}
-{#                                </div>#}
-{##}
-{#                            </div>#}
-{#                        </div><!-- End Revenue Card -->#}
+                        {#                        <div class="col-xxl-4 col-md-6">#}
+                        {#                            <div class="card info-card revenue-card">#}
+                        {##}
+                        {##}
+                        {#                                <div class="card-body">#}
+                        {#                                    <h5 class="card-title">العملاء<br></h5>#}
+                        {##}
+                        {#                                    <div class="d-flex align-items-center">#}
+                        {#                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">#}
+                        {#                                            <i class="bi bi-currency-dollar"></i>#}
+                        {#                                        </div>#}
+                        {#                                        <div class="ps-3">#}
+                        {#                                            <a href="{{ 'customer_balance' }}"><h6 dir="rtl">كشف الحساب للعملاء</h6>#}
+                        {#                                            </a>#}
+                        {#                                            <span class="text-success small pt-1 fw-bold">8%</span> <span#}
+                        {#                                                class="text-muted small pt-2 ps-1">increase</span>#}
+                        {##}
+                        {#                                        </div>#}
+                        {#                                    </div>#}
+                        {#                                </div>#}
+                        {##}
+                        {#                            </div>#}
+                        {#                        </div><!-- End Revenue Card -->#}
                         <div class="col-xxl-4 col-md-6">
                             <div class="card info-card revenue-card">
 
@@ -160,8 +184,9 @@
                                             <i class="bi bi-currency-dollar"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <a href="{{ 'total_customer_summary_report' }}"><h6 dir="rtl">ملخص كشف العملاء
-</h6>
+                                            <a href="{{ 'total_customer_summary_report' }}"><h6 dir="rtl">ملخص كشف
+                                                العملاء
+                                            </h6>
                                             </a>
                                             <span class="text-success small pt-1 fw-bold"></span> <span
                                                 class="text-muted small pt-2 ps-1"></span>

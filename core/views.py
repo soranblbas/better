@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect
 from django.contrib import messages
 
@@ -11,7 +12,10 @@ from django.contrib.auth import authenticate, login, logout
 def index(request):
     t_sale_invoice = SaleInvoice.objects.select_related().count()
     t_sale = SaleItem.objects.values_list().aggregate(Sum('total_amt'))
+
     t_payment = Payment_Entry.objects.select_related().count()
+    t_total_payment = Payment_Entry.objects.values_list().aggregate(Sum('paid_amount'))
+
     t_purchase = Purchase.objects.select_related().count()
     t_p_sale = PurchaseItem.objects.values_list().aggregate(Sum('total_amt'))
 
@@ -21,7 +25,7 @@ def index(request):
     context = {'t_sale_invoice': t_sale_invoice, 't_sale': t_sale,
                't_payment': t_payment, 't_purchase': t_purchase,
                't_p_sale': t_p_sale, 't_item': t_item, 't_customer': t_customer,
-               }
+               't_total_payment': t_total_payment, }
 
     return render(request, 'core/index.html', context)
 
@@ -139,3 +143,15 @@ def customer_total_report_summary(request):
     return render(request, 'core/reports/total_customer_summary_report.html', context)
 
 
+def item_balance(request):
+    items = Inventory.objects.values('item__name').annotate(
+        pur_qty=Sum('pur_qty'),
+        sale_qty=Sum('sale_qty')
+    )
+    for item in items:
+        if item['pur_qty'] and item['sale_qty'] is not None:
+            item['balance'] = item['pur_qty'] - item['sale_qty']
+        else:
+            item['balance'] = item['pur_qty']
+    context = {'items': items}
+    return render(request, 'core/reports/item_balance.html', context)

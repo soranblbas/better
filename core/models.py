@@ -43,6 +43,7 @@ class SaleInvoice(models.Model):
     invoice_number = models.CharField(max_length=8, unique=True, editable=False)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS, default='مدفوع', blank=True)
 
     class Meta:
         verbose_name_plural = '3. Sale Invoice'
@@ -108,6 +109,7 @@ class Item(models.Model):
         ('جملة', 'جملة'),
 
         ('شراء', 'شراء'),
+        ('قسط', 'قسط'),
     )
 
     name = models.CharField(max_length=255)
@@ -191,16 +193,15 @@ class SaleItem(models.Model):
     # price = models.FloatField()
     total_amt = models.FloatField(editable=False, default=0)
     sale_date = models.DateTimeField(auto_now_add=True)
+    is_returned = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
+        if self.is_returned:
+            self.total_amt = -self.qty * self.item.price
+        else:
+            self.total_amt = self.qty * self.item.price
 
-        self.total_amt = self.qty * self.item.price
-        # self.total_amt = self.total_amt - self.payment_entry.paid_amount
-        # item_in_stock = PurchaseItem.objects.filter(item=self.item).first()
-        # if item_in_stock:
-        #     raise ValidationError("Quantity cannot be greater than the stock amount.")
-
-        super(SaleItem, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         try:
             inventory = Inventory.objects.filter(item__name=self.item.name).latest('id')
@@ -215,8 +216,11 @@ class SaleItem(models.Model):
             )
 
         inventory = Inventory.objects.filter(item__name=self.item.name).order_by('-id').first()
-        if inventory:
+        if inventory and self.is_returned:
+            totalBal = inventory.total_bal_qty + self.qty
+        elif inventory:
             totalBal = inventory.total_bal_qty - self.qty
+
         else:
             totalBal = 0
 
@@ -230,8 +234,11 @@ class SaleItem(models.Model):
         )
 
     def clean(self):
-        if self.item.price_list != 'مفرد':
-            raise ValidationError('Price list should  be " مفرد or جملة"')
+        # if self.item.price_list != 'مفرد':
+        #     raise ValidationError('Price list should  be " مفرد or جملة"')
+
+        if self.is_returned and self.qty == 0:
+            raise ValidationError('Quantity should be greater than zero when returning items.')
 
     class Meta:
         verbose_name_plural = '9. Sales Item'
@@ -252,7 +259,7 @@ class PurchaseItem(models.Model):
         self.total_amt = self.qty * self.item.price
         super(PurchaseItem, self).save(*args, **kwargs)
 
-        inventory = Inventory.objects.filter(item=self.item).order_by('-id').first()
+        inventory = Inventory.objects.filter(item__name=self.item.name).order_by('-id').first()
         if inventory:
             totalBal = inventory.total_bal_qty + self.qty
         else:
@@ -288,3 +295,16 @@ class Inventory(models.Model):
 
     def __str__(self):
         return str(self.item)
+    #
+    # def calculate_balance_quantity(self):
+    #     # Calculate the total balance quantity based on the purchase and sale quantities
+    #     if self.purchase and self.sale:
+    #         self.total_bal_qty = self.pur_qty - self.sale_qty
+    #     elif self.purchase:
+    #         self.total_bal_qty = self.pur_qty
+    #     elif self.sale:
+    #         self.total_bal_qty = -self.sale_qty
+    #     else:
+    #         self.total_bal_qty = 0
+    #
+    #     return self.total_bal_qty

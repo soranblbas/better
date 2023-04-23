@@ -32,6 +32,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
     list_display = ('invoice_number', 'customer_name', 'total_sales_amount', 'date')
 
+
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
         if request.method == 'POST':
             try:
@@ -93,7 +94,7 @@ class CustomerPagination(admin.ModelAdmin):
 class CustomerPagination(admin.ModelAdmin):
     list_display = ('item', 'qty', 'total_amt', 'sale_date')
 
-    readonly_fields = ['total_amt', ]
+    readonly_fields = ('total_amt',)
 
 
 @admin.register(Inventory)
@@ -110,6 +111,6 @@ admin.site.register(Unit)
 admin.site.register(Customer)
 admin.site.register(Payment_Entry)
 
-admin.site.site_header = "Better Cooking Bazar Admin"
+admin.site.site_header = "Better Cooking Admin"
 admin.site.site_title = "Better Cooking Admin Portal"
 admin.site.index_title = "Welcome to Better Cooking Retailer Portal"

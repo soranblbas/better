@@ -40,9 +40,11 @@
             <th>اسم العميل</th>
             <th>الحالة</th>
             <th>اسم المادة</th>
-            <th>السعر</th>
+            <th>نوع السعر</th>
+            <th> السعر</th>
             <th>العدد</th>
             <th>المجموع</th>
+            <th>المردود</th>
             <th>التاريخ</th>
 
 
@@ -55,10 +57,13 @@
                 <td>{{ i.sales_invoice.invoice_number }}</td>
                 <td>{{ i.sales_invoice.customer_name }}</td>
                 <td>{{ i.sales_invoice.status }}</td>
-                <td>{{ i.item }}</td>
+                <td>{{ i.item.name }}</td>
+                <td>{{ i.item.price_list }}</td>
+
                 <td>{{ i.item.price }}</td>
                 <td>{{ i.qty }}</td>
                 <td>{{ i.total_amt }}</td>
+                <td>{{ i.is_returned }}</td>
                 <td>{{ i.sale_date }}</td>
 
 
@@ -71,11 +76,11 @@
         <th></th>
         <th></th>
         <th></th>
-        <th style="background-color: #e8c3c7"></th>
-        <th style="background-color: #beecc8"></th>
-        <th style="background-color: #c9d9ee"></th>
         <th></th>
-
+        <th style="background-color: #f6aab2"></th>
+        <th style="background-color: #9cee99"></th>
+        <th></th>
+        <th></th>
 
         </tfoot>
 
