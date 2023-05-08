@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.shortcuts import render, get_object_or_404
 
 from core.filters import *
 from core.models import *
@@ -155,3 +156,34 @@ def item_balance(request):
             item['balance'] = item['pur_qty']
     context = {'items': items}
     return render(request, 'core/reports/item_balance.html', context)
+
+
+def employee_list(request):
+    employees = Employee.objects.all()
+    return render(request, 'core/reports/employee_list.html', {'employees': employees})
+
+
+def journal_entry_list(request):
+    entries = JournalEntry.objects.all()
+    return render(request, 'core/reports/jourrnal_entry_list.html', {'entries': entries})
+
+
+def employee_detail(request, pk):
+    employee = get_object_or_404(Employee, pk=pk)
+    salary = str(Salary.objects.filter(employee_id=employee).latest('date').amount)
+    context = {
+        'employee': employee,
+        'salary': salary
+    }
+    return render(request, 'core/reports/employee_detail.html', context=context)
+
+
+# def employee_detail(request, pk):
+#     try:
+#         employee = Employee.objects.get(id=pk)
+#         emp_salary = Salary.objects.filter(employee__salary__in=pk)
+#
+#         context = {'employee': employee, 'emp_salary': emp_salary, }
+#         return render(request, 'core/reports/employee_detail.html', context)
+#     except:
+#         return render(request, 'core/reports/employee_detail.html')

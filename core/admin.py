@@ -110,6 +110,9 @@ admin.site.register(Unit)
 
 admin.site.register(Customer)
 admin.site.register(Payment_Entry)
+admin.site.register(Employee)
+admin.site.register(Salary)
+admin.site.register(JournalEntry)
 
 admin.site.site_header = "Better Cooking Admin"
 admin.site.site_title = "Better Cooking Admin Portal"

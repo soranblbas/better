@@ -16,5 +16,8 @@ urlpatterns = [
     # path('customer_balance', views.customer_balance, name="customer_balance"),
     path('total_customer_summary_report', views.customer_total_report_summary, name="total_customer_summary_report"),
     path('item-balance', views.item_balance, name='item_balance'),
+    path('employees/', views.employee_list, name='employee_list'),
+    path('employees/<int:pk>/', views.employee_detail, name='employee_detail'),
+    path('journal-entries/', views.journal_entry_list, name='journal_entry_list'),
 
 ]

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Employee List</title>
+</head>
+<body>
+	<h1>Employee List</h1>
+	<ul>
+		{% for employee in employees %}
+			<li><a href="{% url 'employee_detail' employee.pk %}">{{ employee.first_name }} {{ employee.last_name }}</a> - {{ employee.position }}</li>
+		{% endfor %}
+	</ul>
+</body>
+</html>

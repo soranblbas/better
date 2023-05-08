@@ -39,6 +39,8 @@ class SaleInvoice(models.Model):
     STATUS = (
         ('مدفوع', 'مدفوع'),
         ('غير مدفوع', 'غير مدفوع'),
+        ('المردود', 'المردود'),
+        ('الإلغاء', 'الإلغاء'),
     )
     invoice_number = models.CharField(max_length=8, unique=True, editable=False)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -60,6 +62,22 @@ class SaleInvoice(models.Model):
     def total_sales_amount(self):
         total_sales_amount = self.saleitem_set.aggregate(total=Sum('total_amt'))['total']
         return total_sales_amount or 0
+
+    # def cancel_or_return_sale_invoice(sale_invoice, status):
+    #     # Update the status of the SaleInvoice object
+    #     sale_invoice.status = status
+    #     sale_invoice.save()
+    #
+    #     # Update the inventory for each related SaleItem
+    #     for sale_item in sale_invoice.saleitem_set.all():
+    #         sale_item.item = sale_item.item
+    #         if status == 'الإلغاء':
+    #             # Add the quantity of the SaleItem to the quantity of the Product
+    #             sale_item.qty += sale_item.qty
+    #         elif status == 'المردود':
+    #             # Subtract the quantity of the SaleItem from the quantity of the Product
+    #             sale_item.qty -= sale_item.qty
+    #         sale_item.save()
 
 
 class Payment_Entry(models.Model):
@@ -123,36 +141,6 @@ class Item(models.Model):
         return f"{self.name} - {self.price} - {self.price_list}"
 
 
-# class Price_List(models.Model):
-#     price_list = models.CharField(max_length=50, blank=True)
-#
-#     def __str__(self):
-#         return str(self.price_list)
-#
-#     class Meta:
-#         verbose_name_plural = 'Price_List'
-#
-#
-# # Price List
-# class ItemPrice(models.Model):
-#     # PRICELIST = (
-#     #     ('مفرد', 'مفرد'),
-#     #     ('جملة', 'جملة'),
-#     #
-#     #     ('شراء', 'شراء'),
-#     # )
-#
-#     item = models.ForeignKey(Item, on_delete=models.CASCADE)
-#     price_list = models.ForeignKey(Price_List, on_delete=models.CASCADE)
-#     item_price = models.FloatField()
-#
-#     class Meta:
-#         verbose_name_plural = '6. Item Price'
-#
-#     def __str__(self):
-#         return f'{self.item_price},{self.price_list}'
-
-
 # Purchase Invoice
 class Purchase(models.Model):
     invoice_number = models.CharField(max_length=8, unique=True, editable=False)
@@ -193,6 +181,7 @@ class SaleItem(models.Model):
     # price = models.FloatField()
     total_amt = models.FloatField(editable=False, default=0)
     sale_date = models.DateTimeField(auto_now_add=True)
+
     is_returned = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
@@ -308,3 +297,34 @@ class Inventory(models.Model):
     #         self.total_bal_qty = 0
     #
     #     return self.total_bal_qty
+
+
+class Employee(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=20)
+    hire_date = models.DateField()
+    job_title = models.CharField(max_length=50)
+    department = models.CharField(max_length=50)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
+class Salary(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    date = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.employee} - {self.amount} - {self.date}"
+
+
+class JournalEntry(models.Model):
+    date = models.DateField(auto_now=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField()
+
+    def __str__(self):
+        return f"{self.date} - {self.amount} - {self.description}"
