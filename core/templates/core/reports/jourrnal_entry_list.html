@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Journal Entry List</title>
+</head>
+<body>
+	<h1>Journal Entry List</h1>
+	<ul>
+		{% for entry in entries %}
+			<li>{{ entry.date }} - {{ entry.account }} - {{ entry.amount }} - {{ entry.description }}</li>
+		{% endfor %}
+	</ul>
+</body>
+</html>

@@ -177,13 +177,3 @@ def employee_detail(request, pk):
     }
     return render(request, 'core/reports/employee_detail.html', context=context)
 
-
-# def employee_detail(request, pk):
-#     try:
-#         employee = Employee.objects.get(id=pk)
-#         emp_salary = Salary.objects.filter(employee__salary__in=pk)
-#
-#         context = {'employee': employee, 'emp_salary': emp_salary, }
-#         return render(request, 'core/reports/employee_detail.html', context)
-#     except:
-#         return render(request, 'core/reports/employee_detail.html')
