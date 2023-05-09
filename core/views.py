@@ -164,6 +164,9 @@ def employee_list(request):
 
 
 def journal_entry_list(request):
+    t_journal_entry = JournalEntry.objects.select_related().count()
+    j_total_amount = JournalEntry.objects.values_list().aggregate(Sum('amount'))
+
     entries = JournalEntry.objects.all()
     return render(request, 'core/reports/jourrnal_entry_list.html', {'entries': entries})
 
@@ -176,4 +179,3 @@ def employee_detail(request, pk):
         'salary': salary
     }
     return render(request, 'core/reports/employee_detail.html', context=context)
-

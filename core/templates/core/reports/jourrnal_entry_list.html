@@ -1,14 +1,63 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Journal Entry List</title>
-</head>
-<body>
-	<h1>Journal Entry List</h1>
-	<ul>
-		{% for entry in entries %}
-			<li>{{ entry.date }} - {{ entry.account }} - {{ entry.amount }} - {{ entry.description }}</li>
-		{% endfor %}
-	</ul>
-</body>
-</html>
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+    <br>
+    <br> <br>
+    <style>
+        table, th, td {
+            border: 0.5px solid;
+
+        }
+
+        {#@media print {#}
+        {#    table.table tfoot {#}
+        {#        display: table-row-group;#}
+        {#    }#}
+
+        #}#}
+
+    </style>
+
+
+    <h2 class="text-center">  ملخص المصاريف </h2>
+    <table id="expense" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+
+        <tr>
+
+
+            <th>التاريخ</th>
+            <th>الملاحضة</th>
+
+            <th>نسبة</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in  entries %}
+
+            <tr>
+                <td>{{ i.date }}</td>
+                <td>{{ i.description }}</td>
+                <td>{{ i.amount}}</td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+
+        <th></th>
+        <th></th>
+        <th style="background-color: #dc8088"></th>
+
+        </tfoot>
+
+
+    </table>
+
+
+{% endblock %}

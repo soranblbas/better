@@ -1,14 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Employee List</title>
-</head>
-<body>
-	<h1>Employee List</h1>
-	<ul>
-		{% for employee in employees %}
-			<li><a href="{% url 'employee_detail' employee.pk %}">{{ employee.first_name }} {{ employee.last_name }}</a> - {{ employee.position }}</li>
-		{% endfor %}
-	</ul>
-</body>
-</html>
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+    <br>
+    <br> <br>    <br>
+    <br> <br>
+    {#    <style>#}
+    {#        table, th, td {#}
+    {#            border: 0.5px solid;#}
+    {##}
+    {#        }#}
+    {##}
+    {#        @media print {#}
+    {#            table.table tfoot {#}
+    {#                display: table-row-group;#}
+    {#            }#}
+    {##}
+    {#                #}
+    {##}
+    {#    </style>#}
+
+
+    <h2 class="text-center"> قائمة الموضفين الشركة </h2>
+    <table id="employee" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+
+        <tr>
+
+
+            <th>اسم الموضف</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for employee in  employees %}
+
+            <tr class="container" >
+
+                <td>
+                    <a href="{% url 'employee_detail' employee.pk %}">{{ employee.first_name }}
+                        {{ employee.last_name }} - Department of : {{ employee.department }}
+                        Email: {{ employee.email }}</a>
+                </td>
+
+
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+
+        <th></th>
+
+        </tfoot>
+
+
+    </table>
+
+
+{% endblock %}
