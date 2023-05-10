@@ -1,0 +1,164 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <style>
+        @media print {
+            #options {
+                display: none;
+            }
+
+            th, thead, table {
+                text-align: center;
+            }
+
+        }
+    </style>
+
+
+    <br>
+    <br> <br>
+    <div id="options">
+        <a class="btn btn-light text-capitalize border-0 id=print-button"
+           data-mdb-ripple-color="dark"
+           onclick="printInvoice()"><i class="fas fa-print text-primary"></i> Print</a>
+    </div>
+    <div class="container">
+        <div class="card" dir="rtl" id="invoice-print-area">
+
+            <div class="card-body">
+                <div class="container mb-5 mt-3">
+
+
+                    <div class="container">
+                        <div class="col-md-12">
+                            <div class="text-center">
+                                <i class="fab fa-mdb fa-4x ms-0" style="color:#5d9fc5 ;"></i>
+{#                                <p class="pt-0"><img src="{% static 'core/assets/img/electro_invoice_logo.jpg' %}">#}
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <ul class="list-inline" dir="rtl">
+                                    <li class="list-inline-item text-muted">بەرێز: <span dir="rtl"
+                                                                                         style="color:#000303 ;">{{ s_invoice_list.customer_name }}</span>
+                                    </li> &nbsp;&nbsp;
+                                    <li class="list-inline-item text-muted">موبايل: <span dir="rtl"
+                                                                                          style="color:#000303 ;">{{ s_invoice_list.customer_name.customer_mobile }}</span>
+                                    </li>
+                                    <li class="list-inline-item text-muted">بەروار: <span dir="rtl"
+                                                                                          style="color:#000303 ;">{{ s_invoice_list.date }}</span>
+                                    </li>&nbsp;
+
+                                    <li class="list-inline-item text-muted">:ژ.پسولە <span dir="rtl"
+                                                                                           style="color:#000303 ;">{{ s_invoice_list.invoice_number }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                        <div class="row my-2 mx-1 justify-content-center">
+                            <table class="table table-striped table-bordered" dir="rtl">
+                                <thead class="text-white">
+                                <tr align="center">
+
+                                    <th style="color: black" scope="col">نوع/جۆر</th>
+                                    <th style="color: black" scope="col">عدد/دانە</th>
+                                    <th style="color: black" scope="col">سعر/نرخ</th>
+
+                                    <th style="color: black" scope="col">دینار/دۆلار</th>
+                                </tr>
+                                </thead>
+
+                                {% for i in s_item_list %}
+
+
+                                    <tbody>
+                                    <tr align="center">
+
+                                        <td>{{ i.item.name }}</td>
+                                        <td>{{ i.qty }}</td>
+                                        <td>{{ i.item.price }}</td>
+                                        <td>${{ i.total_amt }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <th style="background-color: #2d3091" height="10px"></th>
+                                <th style="background-color: #2d3091"></th>
+                                <th style="background-color: #2d3091"></th>
+                                <th style="background-color: #2d3091"></th>
+                                </tfoot>
+
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-8">
+
+                            </div>
+                            <div class="col-xl-3">
+
+                                <p class="text-black float-start"><span class="text-black me-3"></span><span
+                                        style="font-size: 25px;">${{ s_invoice_list.total_sales_amount }}</span></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row" dir="rtl">
+                            <div class="col-xl-10">
+                                <p class="ms-3">تێبینی: {{ s_invoice_list.note }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+            <footer class="container-fluid">
+                <p class="pt-0"><img src="{% static 'electro/assets/img/invoice_footer.jpg' %}"
+                                     style="behavior: initial">
+                </p>
+            </footer>
+
+            <style>
+                /* styles for screens smaller than 768px */
+                @media (max-width: 768px) {
+                    footer {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+
+                    img {
+                        max-width: 100%;
+                        height: auto;
+                    }
+                }
+            </style>
+
+        </div>
+    </div>
+
+
+    <script>
+        function printInvoice() {
+            // select only the invoice content to print
+            var printContents = document.getElementById("invoice-print-area").innerHTML;
+            // open a new window to print the invoice
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+        }
+
+
+    </script>
+
+
+{% endblock content %}

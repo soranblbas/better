@@ -19,5 +19,7 @@ urlpatterns = [
     path('employees/', views.employee_list, name='employee_list'),
     path('employees/<int:pk>/', views.employee_detail, name='employee_detail'),
     path('journal-entries/', views.journal_entry_list, name='journal_entry_list'),
+    path('single-sale/<str:pk_test>/', views.single_sale, name="single_sale"),
+    path('user_profile/', views.user_profile, name='user_profile'),
 
 ]

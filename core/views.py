@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.db.models.functions import Coalesce
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -179,3 +180,20 @@ def employee_detail(request, pk):
         'salary': salary
     }
     return render(request, 'core/reports/employee_detail.html', context=context)
+
+
+def single_sale(request, pk_test):
+    try:
+        s_invoice_list = SaleInvoice.objects.get(id=pk_test)
+        s_item_list = SaleItem.objects.filter(sales_invoice=pk_test)
+
+        context = {'s_invoice_list': s_invoice_list, 's_item_list': s_item_list, }
+        return render(request, 'core/reports/single_sale_report.html', context)
+    except:
+        return render(request, 'core/reports/single_sale_report.html')
+
+
+def user_profile(request):
+    us_p = User.objects.all()
+    context = {'us_p': us_p}
+    return render(request, 'core/reports/users-profile.html', context)
