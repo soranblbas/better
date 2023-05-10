@@ -26,6 +26,7 @@
             <th>Item</th>
             <th>Purchase Qty</th>
             <th>Sale Qty</th>
+            <th>Return Qty</th>
             <th>Balance</th>
         </tr>
         </thead>
@@ -35,6 +36,7 @@
                 <td>{{ item.item__name }}</td>
                 <td>{{ item.pur_qty }}</td>
                 <td>{{ item.sale_qty }}</td>
+                <td>{{ item.return_qty }}</td>
                 <td>{{ item.balance }}</td>
             </tr>
         {% endfor %}

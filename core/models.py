@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.db.models import Sum
 from django.utils.crypto import get_random_string
@@ -63,6 +64,13 @@ class SaleInvoice(models.Model):
         total_sales_amount = self.saleitem_set.aggregate(total=Sum('total_amt'))['total']
         return total_sales_amount or 0
 
+    def total_discount_amount(self):
+        total_discount_amount = self.saleitem_set.aggregate(total=Sum('discount_value'))['total']
+        return total_discount_amount or 0
+
+    def total_sub_amount(self):
+        total_sales_amount = self.saleitem_set.aggregate(total=Sum('sub_total'))['total']
+        return total_sales_amount or 0
     # def cancel_or_return_sale_invoice(sale_invoice, status):
     #     # Update the status of the SaleInvoice object
     #     sale_invoice.status = status
@@ -81,26 +89,55 @@ class SaleInvoice(models.Model):
 
 
 class Payment_Entry(models.Model):
-    customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    sales_invoice = models.ForeignKey(SaleInvoice, on_delete=models.CASCADE)
+    Qst = (
+        ('نقد', 'نقد'),
+        ('قستی ١', 'قستی ١'),
+        ('قستی ٢', 'قستی ٢'),
+        ('قستی ٣ ', ' قستی ٣'),
+        ('قستی ٤', 'قستی ٤'),
+        ('قستی ٥', 'قستی ٥'),
+        ('قستی ٦ ', ' قستی ٦'),
+        ('قستی ٧', 'قستی ٧'),
+        ('قستی ٨', 'قستی ٨'),
+        ('قستی ٩ ', ' قستی ٩'),
+        ('قستی ١٠', 'قستی ١٠'),
+        ('قستی ١١', 'قستی ١١'),
+        ('قستی ١٢ ', ' قستی ١٢'),
+    )
 
-    invoice_number = models.CharField(max_length=8, unique=True, editable=False)
-    paid_amount = models.FloatField(blank=True)
-    payment_date = models.DateTimeField(blank=True)
-    note = models.TextField(blank=True)
+    invoice_number = models.CharField(unique=True, editable=False, max_length=10)
+    sales_invoice = models.ForeignKey(SaleInvoice, on_delete=models.CASCADE)
+    # customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    q_type = models.CharField(max_length=10, verbose_name="Payment type", choices=Qst, blank=False)
+
+    paid_amount = models.FloatField(validators=[MinValueValidator(0.01)], default=1)
+
+    payment_date = models.DateTimeField(blank=False)
+    note = models.CharField(max_length=100, blank=True)
     old_balance = models.DecimalField(max_digits=20, decimal_places=2, default=0, editable=False)
+
+    class Meta:
+        verbose_name_plural = '8. پارەدان'
+
+    def __str__(self):
+        return str(self.invoice_number)
+
+    def clean(self):
+        if not self.q_type:
+            raise ValidationError(' تکایە شێوازی پارەدان هەڵبژێرە؟')
 
     def save(self, *args, **kwargs):
         if not self.invoice_number:
-            # Generate a random 8 character invoice number
-            self.invoice_number = secrets.token_hex(4).upper()
+            # Get the highest existing invoice number
+            highest = Payment_Entry.objects.aggregate(models.Max('invoice_number'))['invoice_number__max']
+            if highest is None:
+                # If no invoices exist yet, start at 100
+                self.invoice_number = 'PINV-100'
+            else:
+                # Increment the highest invoice number by 1 and add prefix
+                prefix, number = highest.split('-')
+                self.invoice_number = prefix + '-' + str(int(number) + 1)
         super().save(*args, **kwargs)
-
-    class Meta:
-        verbose_name_plural = '8. Payment Entry'
-
-    def __str__(self):
-        return f"{self.invoice_number} - {self.paid_amount}"
 
 
 # Sales Invoice
@@ -174,21 +211,34 @@ class Purchase(models.Model):
 # Sales Item
 class SaleItem(models.Model):
     sales_invoice = models.ForeignKey(SaleInvoice, on_delete=models.CASCADE)
-
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     qty = models.PositiveSmallIntegerField(default=1)
-    # item_price = models.ForeignKey(ItemPrice, on_delete=models.CASCADE)
-    # price = models.FloatField()
     total_amt = models.FloatField(editable=False, default=0)
     sale_date = models.DateTimeField(auto_now_add=True)
-
     is_returned = models.BooleanField(default=False)
+    sub_total = models.FloatField(validators=[MinValueValidator(0.01)], default=0)
+    discount_type = models.CharField(max_length=10, choices=(
+        ('amount', 'Amount'),
+        ('percentage', 'Percentage')
+    ), blank=True)
+    discount_value = models.FloatField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
+
+        self.sub_total = self.item.price * self.qty
+        if self.discount_type == 'amount' and self.discount_value is not None:
+            discount = self.discount_value
+        elif self.discount_type == 'percentage' and self.discount_value is not None:
+            discount = self.item.price * self.discount_value / 100
+        else:
+            discount = 0
+
+        self.total_amt = self.sub_total - discount
+
         if self.is_returned:
             self.total_amt = -self.qty * self.item.price
-        else:
-            self.total_amt = self.qty * self.item.price
+        # else:
+        #     self.total_amt = self.qty * self.item.price
 
         super().save(*args, **kwargs)
 
@@ -198,27 +248,23 @@ class SaleItem(models.Model):
             raise ValueError(f"{self.item.name} is not in stock")
 
         totalBal = inventory.total_bal_qty
-        if self.qty > totalBal:
-            raise ValueError(
-                f"Sorry, we don't have enough {self.item.name} in stock right now. "
-                f"Please reduce your sale quantity to {totalBal} or less."
-            )
 
-        inventory = Inventory.objects.filter(item__name=self.item.name).order_by('-id').first()
-        if inventory and self.is_returned:
-            totalBal = inventory.total_bal_qty + self.qty
-        elif inventory:
-            totalBal = inventory.total_bal_qty - self.qty
-
+        if self.is_returned:
+            sale_qty = 0
+            return_qty = self.qty
+            totalBal += self.qty  # Add returned quantity to the balance
         else:
-            totalBal = 0
+            sale_qty = self.qty
+            return_qty = 0
+            totalBal -= sale_qty  # Subtract sale quantity from the balance
 
         Inventory.objects.create(
             item=self.item,
             purchase=None,
             sale=self.sales_invoice,
             pur_qty=None,
-            sale_qty=self.qty,
+            sale_qty=sale_qty,
+            return_qty=return_qty,
             total_bal_qty=totalBal
         )
 
@@ -228,6 +274,8 @@ class SaleItem(models.Model):
 
         if self.is_returned and self.qty == 0:
             raise ValidationError('Quantity should be greater than zero when returning items.')
+        if not self.discount_type and self.discount_value:
+            raise ValidationError('Please select a discount type')
 
     class Meta:
         verbose_name_plural = '9. Sales Item'
@@ -278,6 +326,7 @@ class Inventory(models.Model):
     pur_qty = models.FloatField(default=0, null=True)
     sale_qty = models.FloatField(default=0, null=True)
     total_bal_qty = models.FloatField(default=0)
+    return_qty = models.FloatField(default=0)
 
     class Meta:
         verbose_name_plural = '10. Stock Details'

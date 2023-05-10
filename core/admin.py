@@ -18,6 +18,8 @@ class SalesItem(admin.TabularInline):
             kwargs["queryset"] = Item.objects.exclude(price_list='شراء')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    readonly_fields = ('sub_total',)
+
 
 @admin.register(SaleInvoice)
 class ProfileAdmin(admin.ModelAdmin):
@@ -30,8 +32,9 @@ class ProfileAdmin(admin.ModelAdmin):
     #     total_sales = sum(sale.total_amt for sale in obj.sales.all())
     #     return format_html('<b>{}</b>', total_sales)
 
-    list_display = ('invoice_number', 'customer_name', 'total_sales_amount', 'date')
-
+    list_display = (
+        'invoice_number', 'customer_name', 'total_sub_amount', 'total_discount_amount', 'total_sales_amount', 'date')
+    list_filter = ('status',)
 
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
         if request.method == 'POST':
@@ -99,7 +102,7 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Inventory)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('item', 'purchase', 'sale', 'pur_qty', 'sale_qty', 'total_bal_qty')
+    list_display = ('item', 'purchase', 'sale', 'pur_qty', 'sale_qty', 'return_qty', 'total_bal_qty')
     list_display_links = ['purchase', 'sale', ]
 
 
