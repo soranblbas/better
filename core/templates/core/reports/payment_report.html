@@ -49,7 +49,7 @@
         {% for i in  payment_report %}
 
             <tr>
-                <td>{{ i.customer_name }}</td>
+                <td>{{ i.sales_invoice.customer_name }}</td>
                 <td>{{ i.invoice_number }}</td>
                 <td>{{ i.sales_invoice }}</td>
                 <td>{{ i.paid_amount }}</td>

@@ -32,6 +32,7 @@
             <th> الرصيد قبل الدفعة الأخيرة</th>
             <th> اخر‌التسديدات</th>
             <th>المتبقي</th>
+            <th>موبایل</th>
 
 
         </tr>
@@ -45,6 +46,7 @@
                 <td>{{ data.balance_before_last_payment }}</td>
                 <td>{{ data.last_payment }}</td>
                 <td>{{ data.actual_credit }}</td>
+                <td>{{ data.phone_number }}</td>
 
             </tr>
         {% endfor %}
@@ -57,7 +59,7 @@
         <th style="background-color: #beecc8"></th>
 
         <th style="background-color: #e8c3c7"></th>
-           <th style="background-color: #e8c3c7"></th>
+        <th style="background-color: #e8c3c7"></th>
 
 
         </tfoot>

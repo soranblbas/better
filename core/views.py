@@ -24,10 +24,14 @@ def index(request):
     t_item = Item.objects.select_related().count()
     t_customer = Customer.objects.select_related().count()
 
+    t_journal_entry = JournalEntry.objects.select_related().count()
+    j_total_amount = JournalEntry.objects.values_list().aggregate(Sum('amount'))
+
     context = {'t_sale_invoice': t_sale_invoice, 't_sale': t_sale,
                't_payment': t_payment, 't_purchase': t_purchase,
                't_p_sale': t_p_sale, 't_item': t_item, 't_customer': t_customer,
-               't_total_payment': t_total_payment, }
+               't_total_payment': t_total_payment,
+               't_journal_entry': t_journal_entry, 'j_total_amount': j_total_amount}
 
     return render(request, 'core/index.html', context)
 
@@ -121,10 +125,12 @@ def customer_total_report_summary(request):
     c_balance_report = {}
 
     for customer_id in customer_ids:
-        customer_name = Customer.objects.get(id=customer_id).customer_name
+        customer = Customer.objects.get(id=customer_id)
+        customer_name = customer.customer_name
+        customer_mobile = customer.customer_mobile
 
         sale_items = SaleItem.objects.filter(sales_invoice__customer_name_id=customer_id)
-        payments = Payment_Entry.objects.filter(customer_name=customer_id).order_by('-payment_date')
+        payments = Payment_Entry.objects.filter(sales_invoice__customer_name_id=customer_id).order_by('-payment_date')
 
         total_invoice_amount = sum(sale_item.total_amt for sale_item in sale_items)
         total_paid_amount = sum(payment.paid_amount for payment in payments)
@@ -138,7 +144,8 @@ def customer_total_report_summary(request):
             'total_paid_amount': total_paid_amount,
             'actual_credit': actual_credit,
             'last_payment': last_payment.paid_amount if last_payment else 0,
-            'balance_before_last_payment': balance_before_last_payment
+            'balance_before_last_payment': balance_before_last_payment,
+            'phone_number': customer_mobile
         }
 
     context = {'c_balance_report': c_balance_report}
@@ -173,9 +180,10 @@ def employee_list(request):
 def journal_entry_list(request):
     t_journal_entry = JournalEntry.objects.select_related().count()
     j_total_amount = JournalEntry.objects.values_list().aggregate(Sum('amount'))
+    entries = JournalEntry.objects.select_related()
+    context = {'t_journal_entry': t_journal_entry, 'j_total_amount': j_total_amount,'entries':entries}
 
-    entries = JournalEntry.objects.all()
-    return render(request, 'core/reports/jourrnal_entry_list.html', {'entries': entries})
+    return render(request, 'core/reports/jourrnal_entry_list.html', context)
 
 
 def employee_detail(request, pk):
@@ -192,8 +200,10 @@ def single_sale(request, pk_test):
     try:
         s_invoice_list = SaleInvoice.objects.get(id=pk_test)
         s_item_list = SaleItem.objects.filter(sales_invoice=pk_test)
+        total_sold_qty = s_item_list.aggregate(total_qty=Sum('qty'))[
+                             'total_qty'] or 0  # Calculate the sum of sold quantities
 
-        context = {'s_invoice_list': s_invoice_list, 's_item_list': s_item_list, }
+        context = {'s_invoice_list': s_invoice_list, 's_item_list': s_item_list,'total_sold_qty':total_sold_qty }
         return render(request, 'core/reports/single_sale_report.html', context)
     except:
         return render(request, 'core/reports/single_sale_report.html')

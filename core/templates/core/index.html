@@ -25,16 +25,14 @@
                 </li><!-- End Dashboard Nav -->
 
 
-
                 <li class="nav-heading">Pages</li>
 
-{#                <li class="nav-item">#}
-{#                    <a class="nav-link collapsed" href="{% url 'user_profile' %}">#}
-{#                        <i class="bi bi-person"></i>#}
-{#                        <span>Profile</span>#}
-{#                    </a>#}
-{#                </li><!-- End Profile Page Nav -->#}
-
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link collapsed" href="{% url 'user_profile' %}">#}
+                {#                        <i class="bi bi-person"></i>#}
+                {#                        <span>Profile</span>#}
+                {#                    </a>#}
+                {#                </li><!-- End Profile Page Nav -->#}
 
 
                 <li class="nav-item">
@@ -44,12 +42,12 @@
                     </a>
                 </li><!-- End Contact Page Nav -->
 
-{#                <li class="nav-item">#}
-{#                    <a class="nav-link collapsed" href="{% url 'index' %}">#}
-{#                        <i class="bi bi-card-list"></i>#}
-{#                        <span>Register</span>#}
-{#                    </a>#}
-{#                </li><!-- End Register Page Nav -->#}
+                {#                <li class="nav-item">#}
+                {#                    <a class="nav-link collapsed" href="{% url 'index' %}">#}
+                {#                        <i class="bi bi-card-list"></i>#}
+                {#                        <span>Register</span>#}
+                {#                    </a>#}
+                {#                </li><!-- End Register Page Nav -->#}
 
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="{% url 'logout' %}">
@@ -235,14 +233,12 @@
                                             <i class="bi bi-currency-dollar"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <a href="{{ 'journal-entries' }}"> {{ t_journal_entry }}<h6 dir="rtl">ملخص
-                                                المصاريف
-
-                                            </h6>
+                                            <a href="{{ 'journal-entries' }}"><h6 dir="rtl">{{ t_journal_entry }}
+                                                وصل</h6>
                                             </a>
-                                            <span class="text-success small pt-1 fw-bold"></span> {{ t_journal_entry }}
+                                            <span class="text-success small pt-1 fw-bold">${{ j_total_amount.amount__sum }} </span>
                                             <span
-                                                    class="text-muted small pt-2 ps-1"></span>
+                                                    class="text-muted small pt-2 ps-1">Amount</span>
 
                                         </div>
                                     </div>
