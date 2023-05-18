@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Sum
 from django.utils.crypto import get_random_string
 import secrets
+from django.core.exceptions import ValidationError
 
 
 # Vendor
@@ -16,7 +17,7 @@ class Vendor(models.Model):
     note = models.TextField(blank=True)
 
     class Meta:
-        verbose_name_plural = '1. Vendors'
+        verbose_name_plural = ' الموردين'
 
     def __str__(self):
         return self.full_name
@@ -30,7 +31,7 @@ class Customer(models.Model):
     city = models.CharField(max_length=50, blank=True)
 
     class Meta:
-        verbose_name_plural = '2. Customers'
+        verbose_name_plural = 'الزبائن'
 
     def __str__(self):
         return self.customer_name
@@ -41,20 +42,22 @@ class SaleInvoice(models.Model):
         ('مدفوع', 'مدفوع'),
         ('غير مدفوع', 'غير مدفوع'),
         ('المردود', 'المردود'),
-        ('الإلغاء', 'الإلغاء'),
+
     )
     invoice_number = models.CharField(max_length=8, unique=True, editable=False)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS, default='مدفوع', blank=True)
+    status = models.CharField(max_length=10, choices=STATUS, default='مدفوع')
+    note = models.CharField(max_length=100, blank=True)
 
     class Meta:
-        verbose_name_plural = '3. Sale Invoice'
+        verbose_name_plural = 'فاتورة البيع'
 
     def save(self, *args, **kwargs):
         if not self.invoice_number:
             # Generate a random 8 character invoice number
             self.invoice_number = secrets.token_hex(4).upper()
+            self.full_clean()  # Run validation before saving
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -71,21 +74,11 @@ class SaleInvoice(models.Model):
     def total_sub_amount(self):
         total_sales_amount = self.saleitem_set.aggregate(total=Sum('sub_total'))['total']
         return total_sales_amount or 0
-    # def cancel_or_return_sale_invoice(sale_invoice, status):
-    #     # Update the status of the SaleInvoice object
-    #     sale_invoice.status = status
-    #     sale_invoice.save()
-    #
-    #     # Update the inventory for each related SaleItem
-    #     for sale_item in sale_invoice.saleitem_set.all():
-    #         sale_item.item = sale_item.item
-    #         if status == 'الإلغاء':
-    #             # Add the quantity of the SaleItem to the quantity of the Product
-    #             sale_item.qty += sale_item.qty
-    #         elif status == 'المردود':
-    #             # Subtract the quantity of the SaleItem from the quantity of the Product
-    #             sale_item.qty -= sale_item.qty
-    #         sale_item.save()
+
+    def clean(self):
+        sale_items = self.saleitem_set.all()
+        if not sale_items:
+            raise ValidationError("At least one item must be selected for the invoice.")
 
 
 class Payment_Entry(models.Model):
@@ -117,7 +110,7 @@ class Payment_Entry(models.Model):
     old_balance = models.DecimalField(max_digits=20, decimal_places=2, default=0, editable=False)
 
     class Meta:
-        verbose_name_plural = '8. پارەدان'
+        verbose_name_plural = 'إدخال الدفع'
 
     def __str__(self):
         return str(self.invoice_number)
@@ -151,7 +144,7 @@ class Unit(models.Model):
     short_name = models.CharField(max_length=50)
 
     class Meta:
-        verbose_name_plural = '5. Units'
+        verbose_name_plural = 'الوحدات'
 
     def __str__(self):
         return self.title
@@ -172,7 +165,7 @@ class Item(models.Model):
     price_list = models.CharField(max_length=8, choices=PRICELIST, default='مفرد')
 
     class Meta:
-        verbose_name_plural = 'Items'
+        verbose_name_plural = 'المواد'
 
     def __str__(self):
         return f"{self.name} - {self.price} - {self.price_list}"
@@ -185,7 +178,7 @@ class Purchase(models.Model):
     date = models.DateTimeField()
 
     class Meta:
-        verbose_name_plural = '8. Purchase Invoice'
+        verbose_name_plural = ' فاتورة الشراء'
 
     def save(self, *args, **kwargs):
         if not self.invoice_number:
@@ -277,8 +270,11 @@ class SaleItem(models.Model):
         if not self.discount_type and self.discount_value:
             raise ValidationError('Please select a discount type')
 
+        if self.is_returned and self.sales_invoice.status != "المردود":
+            raise ValidationError('تکایە مەردود هەلبژيرە')
+
     class Meta:
-        verbose_name_plural = '9. Sales Item'
+        verbose_name_plural = ' بند المبيعات'
 
 
 # Purchased Item
@@ -315,7 +311,7 @@ class PurchaseItem(models.Model):
             raise ValidationError('Price list should be "شراء"')
 
     class Meta:
-        verbose_name_plural = '9. Purchased Item'
+        verbose_name_plural = ' العنصر الذي تم شراؤه'
 
 
 # Inventories
@@ -329,7 +325,7 @@ class Inventory(models.Model):
     return_qty = models.FloatField(default=0)
 
     class Meta:
-        verbose_name_plural = '10. Stock Details'
+        verbose_name_plural = ' تفاصيل المخزون'
 
     def __str__(self):
         return str(self.item)
@@ -360,6 +356,9 @@ class Employee(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+    class Meta:
+        verbose_name_plural = ' الموظفون'
+
 
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
@@ -369,6 +368,9 @@ class Salary(models.Model):
     def __str__(self):
         return f"{self.employee} - {self.amount} - {self.date}"
 
+    class Meta:
+        verbose_name_plural = ' الرواتب'
+
 
 class JournalEntry(models.Model):
     date = models.DateField(auto_now=True)
@@ -377,3 +379,6 @@ class JournalEntry(models.Model):
 
     def __str__(self):
         return f"{self.date} - {self.amount} - {self.description}"
+
+    class Meta:
+        verbose_name_plural = ' المصاريف'

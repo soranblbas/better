@@ -46,6 +46,7 @@
             <th>المجموع</th>
             <th>المردود</th>
             <th>التاريخ</th>
+            <th>الملاحظة</th>
 
 
         </tr>
@@ -65,6 +66,7 @@
                 <td>{{ i.total_amt }}</td>
                 <td>{{ i.is_returned }}</td>
                 <td>{{ i.sale_date }}</td>
+               <td>{{ i.sales_invoice.note }}</td>
 
 
             </tr>

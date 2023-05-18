@@ -86,18 +86,18 @@ class CustomerPagination(admin.ModelAdmin):
 #     readonly_fields = ['total_amt', ]
 
 
-@admin.register(PurchaseItem)
-class CustomerPagination(admin.ModelAdmin):
-    list_display = ('item', 'qty', 'total_amt', 'pur_date')
+# @admin.register(PurchaseItem)
+# class CustomerPagination(admin.ModelAdmin):
+#     list_display = ('item', 'qty', 'total_amt', 'pur_date')
+#
+#     readonly_fields = ['total_amt', ]
 
-    readonly_fields = ['total_amt', ]
-
-
-@admin.register(SaleItem)
-class CustomerPagination(admin.ModelAdmin):
-    list_display = ('item', 'qty', 'total_amt', 'sale_date')
-
-    readonly_fields = ('total_amt',)
+#
+# @admin.register(SaleItem)
+# class CustomerPagination(admin.ModelAdmin):
+#     list_display = ('item', 'qty', 'total_amt', 'sale_date')
+#
+#     readonly_fields = ('total_amt',)
 
 
 @admin.register(Inventory)

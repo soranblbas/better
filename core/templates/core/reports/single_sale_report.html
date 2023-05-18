@@ -3,6 +3,8 @@
 
 {% block content %}
 
+
+
     <br>
     <br> <br>
     <div id="options">
@@ -57,7 +59,9 @@
                                     <th style="color: black" scope="col">نوع/جۆر</th>
                                     <th style="color: black" scope="col">عدد/دانە</th>
                                     <th style="color: black" scope="col">سعر/نرخ</th>
-
+                                    <th style="color: black" scope="col">المجموع/سەرجەم</th>
+                                    <th style="color: black" scope="col">نوع التخفیض / جۆری داشکان</th>
+                                    <th style="color: black" scope="col">التخفيض/داشکان</th>
                                     <th style="color: black" scope="col">دینار/دۆلار</th>
                                 </tr>
                                 </thead>
@@ -71,6 +75,9 @@
                                         <td>{{ i.item.name }}</td>
                                         <td>{{ i.qty }}</td>
                                         <td>{{ i.item.price }}</td>
+                                        <td>{{ i.sub_total }}</td>
+                                        <td>{{ i.discount_type }}</td>
+                                        <td>${{ i.discount_value }}</td>
                                         <td>${{ i.total_amt }}</td>
 
                                         <br>
@@ -78,22 +85,21 @@
                                 {% endfor %}
                                 </tbody>
                                 <tfoot>
-                                <th style="background-color: #2d3091" height="10px"></th>
-                                <th style="background-color: #2d3091"></th>
-                                <th style="background-color: #2d3091"></th>
-                                <th style="background-color: #2d3091"></th>
+
                                 </tfoot>
 
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-xl-8">
-                                <p> Total Item Quantity: &nbsp; {{ total_sold_qty }}</p>
+                                <p style="font-size: 25px;" dir="rtl"> عدد المواد :{{ total_sold_qty }}</p>
                             </div>
                             <div class="col-xl-3">
 
                                 <p class="text-black float-start"><span class="text-black me-3"></span><span
                                         style="font-size: 25px;">${{ s_invoice_list.total_sales_amount }}</span></p>
+
+
                             </div>
                         </div>
                         <hr>
@@ -144,7 +150,7 @@
                     }
 
                     th, td {
-                        padding: 8px;
+                        padding: 2px;
                         text-align: center;
                         border: 1px solid #ccc;
                     }
