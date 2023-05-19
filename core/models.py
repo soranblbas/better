@@ -75,10 +75,10 @@ class SaleInvoice(models.Model):
         total_sales_amount = self.saleitem_set.aggregate(total=Sum('sub_total'))['total']
         return total_sales_amount or 0
 
-    def clean(self):
-        sale_items = self.saleitem_set.all()
-        if not sale_items:
-            raise ValidationError("At least one item must be selected for the invoice.")
+    # def clean(self):
+    #     sale_items = self.saleitem_set.all()
+    #     if not sale_items:
+    #         raise ValidationError("At least one item must be selected for the invoice.")
 
 
 class Payment_Entry(models.Model):
