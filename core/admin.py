@@ -107,15 +107,39 @@ class CustomerPagination(admin.ModelAdmin):
     list_display_links = ['purchase', 'sale', ]
 
 
+@admin.register(Salary)
+class CustomerPagination(admin.ModelAdmin):
+    list_display = ('employee', 'amount', 'date')
+    list_display_links = ['employee', ]
+    list_filter = ('employee',)
+
+
+@admin.register(Employee)
+class CustomerPagination(admin.ModelAdmin):
+    list_display = ('first_name', 'last_name', 'email', 'phone_number', 'hire_date', 'job_title', 'department',)
+    list_display_links = ['first_name', ]
+    list_filter = ('department', 'job_title',)
+
+
+@admin.register(Payment_Entry)
+class CustomerPagination(admin.ModelAdmin):
+    list_display = ('sales_invoice', 'paid_amount', 'q_type', 'payment_date', 'note',)
+    list_display_links = ['sales_invoice', ]
+    list_filter = ('sales_invoice',)
+
+
+@admin.register(Customer)
+class CustomerPagination(admin.ModelAdmin):
+    list_display = ('customer_name', 'customer_mobile', 'customer_address', 'city',)
+    list_display_links = ['customer_name', ]
+    list_filter = ('city',)
+
+
 admin.site.register(Vendor)
 admin.site.register(Unit)
-
 # admin.site.register(ItemDetail)
 
-admin.site.register(Customer)
-admin.site.register(Payment_Entry)
-admin.site.register(Employee)
-admin.site.register(Salary)
+
 admin.site.register(JournalEntry)
 
 admin.site.site_header = "Better Cooking Admin"
