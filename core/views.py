@@ -186,9 +186,18 @@ def journal_entry_list(request):
     return render(request, 'core/reports/jourrnal_entry_list.html', context)
 
 
+from django.core.exceptions import ObjectDoesNotExist
+
+
 def employee_detail(request, pk):
     employee = get_object_or_404(Employee, pk=pk)
-    salary = str(Salary.objects.filter(employee_id=employee).latest('date').amount)
+
+    try:
+        latest_salary = Salary.objects.filter(employee_id=employee).latest('date')
+        salary = str(latest_salary.amount)
+    except ObjectDoesNotExist:
+        salary = '0'
+
     context = {
         'employee': employee,
         'salary': salary

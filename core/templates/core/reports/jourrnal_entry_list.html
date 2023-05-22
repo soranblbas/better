@@ -7,7 +7,8 @@
     <style>
         table, th, td {
             border: 0.5px solid;
-
+            direction: rtl;
+            text-align: center;
         }
 
         {#@media print {#}
@@ -20,7 +21,7 @@
     </style>
 
 
-    <h2 class="text-center">  ملخص المصاريف </h2>
+    <h2 class="text-center"> ملخص المصاريف </h2>
     <table id="expense" class="table table-striped" style="background-color: #68a7e5">
 
         <thead>
@@ -42,7 +43,7 @@
             <tr>
                 <td>{{ i.date }}</td>
                 <td>{{ i.description }}</td>
-                <td>${{ i.amount}}</td>
+                <td>${{ i.amount }}</td>
 
 
             </tr>

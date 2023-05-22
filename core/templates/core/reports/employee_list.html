@@ -5,33 +5,33 @@
     <br>
     <br> <br>    <br>
     <br> <br>
-    {#    <style>#}
-    {#        table, th, td {#}
-    {#            border: 0.5px solid;#}
-    {##}
-    {#        }#}
-    {##}
-    {#        @media print {#}
-    {#            table.table tfoot {#}
-    {#                display: table-row-group;#}
-    {#            }#}
-    {##}
-    {#                #}
-    {##}
-    {#    </style>#}
+    <style>
+        table, th, td {
+            border: 0.5px solid;
+            direction: rtl;
+            text-align: center;
+        }
 
+        {#@media print {#}
+        {#    table.table tfoot {#}
+        {#        display: table-row-group;#}
+        {#    }#}
+        {##}
+        {#        #}#}
+
+    </style>
 
     <h2 class="text-center"> قائمة الموضفين الشركة </h2>
     <table id="employee" class="table table-striped" style="background-color: #68a7e5">
 
         <thead>
 
-        <tr>
 
 
-            <th>اسم الموضف</th>
 
-        </tr>
+            <th >معلومات الموضف</th>
+
+
         </thead>
         <tbody>
         {% for employee in  employees %}

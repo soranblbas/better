@@ -88,19 +88,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p>كشف الحساب المبيعات</p></center>',
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -129,7 +141,6 @@
                 }
             ],
         });
-
         $('#example2').DataTable({
             "pageLength": 50,
 
@@ -137,19 +148,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p>كشف التسديدات </p></center>',
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -184,20 +207,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p>كشف الحساب المشتريات </p></center>',
-
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -232,20 +266,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p>كشف الحساب المشتريات </p></center>',
-
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -280,20 +325,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p>كشف الحساب المشتريات للعملاء</p></center>',
-
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -328,20 +384,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p>كشف الحساب التسديدات للعملاء</p></center>',
-
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -370,7 +437,6 @@
                 }
             ],
         });
-
         $('#example7').DataTable({
             "pageLength": 50,
 
@@ -428,28 +494,37 @@
                 }
             ],
         });
-
-
         $('#example8').DataTable({
             "pageLength": 50,
 
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p> ملخص المخزن</p></center>',
-
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -484,20 +559,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p> سجل الموضف</p></center>',
-
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
@@ -532,20 +618,31 @@
             dom: 'Bfrtip',
             buttons: [
                 {
+
+
                     extend: 'print',
                     footer: true,
-                    title: '<center><p> ملخص المصاريف</p></center>',
-
+                    title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
                     customize: function (win) {
                         $(win.document.body)
                             .css('font-size', '10pt')
-                            .prepend(
-                                {#'<img src="http://datatables.net/media/images/logo-fade.png" style="position:relative; top:0; left:0;" />'#}
-                            );
+                            .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
 
                         $(win.document.body).find('table')
                             .addClass('compact')
                             .css('font-size', 'inherit');
+
+                        // Add footer with contact information and address
+                        var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +
+                            '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +
+                            '<div class="footer-contact" dir="rtl">' +
+                            'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +
+                            'الهاتف: 07501131331 - 07504696061 - 077340303330' +
+                            '</div>' +
+                            '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +
+                            '</div>';
+
+                        $(win.document.body).append(footer);
                     }
                 }
             ],
