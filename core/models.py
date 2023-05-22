@@ -49,6 +49,7 @@ class SaleInvoice(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS, default='مدفوع')
     note = models.CharField(max_length=100, blank=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name_plural = 'فاتورة البيع'

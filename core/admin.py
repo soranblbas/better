@@ -33,7 +33,8 @@ class ProfileAdmin(admin.ModelAdmin):
     #     return format_html('<b>{}</b>', total_sales)
 
     list_display = (
-        'invoice_number', 'customer_name', 'total_sub_amount', 'total_discount_amount', 'total_sales_amount', 'date')
+        'invoice_number', 'customer_name', 'total_sub_amount', 'total_discount_amount', 'total_sales_amount', 'date',
+        'updated_at',)
     list_filter = ('status',)
 
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
