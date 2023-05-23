@@ -56,7 +56,7 @@ class PurchasesItem(admin.TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "item":
-            kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'جملة'])
+            kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد','قسط' ,'جملة'])
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
