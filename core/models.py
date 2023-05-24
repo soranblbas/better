@@ -229,7 +229,7 @@ class SaleItem(models.Model):
 
         self.total_amt = self.sub_total - discount
 
-        if self.is_returned:
+        if self.is_returned and self.sales_invoice.status == "المردود":
             self.total_amt = -self.qty * self.item.price
         # else:
         #     self.total_amt = self.qty * self.item.price
@@ -243,7 +243,7 @@ class SaleItem(models.Model):
 
         totalBal = inventory.total_bal_qty
 
-        if self.is_returned:
+        if self.is_returned and self.sales_invoice.status == "المردود":
             sale_qty = 0
             return_qty = self.qty
             totalBal += self.qty  # Add returned quantity to the balance
