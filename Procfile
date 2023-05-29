@@ -1,1 +1,1 @@
-web: gunicorn better.wsgi
+web:gunicorn better.wsgi
