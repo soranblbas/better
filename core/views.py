@@ -181,7 +181,7 @@ def journal_entry_list(request):
     t_journal_entry = JournalEntry.objects.select_related().count()
     j_total_amount = JournalEntry.objects.values_list().aggregate(Sum('amount'))
     entries = JournalEntry.objects.select_related()
-    context = {'t_journal_entry': t_journal_entry, 'j_total_amount': j_total_amount,'entries':entries}
+    context = {'t_journal_entry': t_journal_entry, 'j_total_amount': j_total_amount, 'entries': entries}
 
     return render(request, 'core/reports/jourrnal_entry_list.html', context)
 
@@ -205,17 +205,42 @@ def employee_detail(request, pk):
     return render(request, 'core/reports/employee_detail.html', context=context)
 
 
+from django.db.models import Sum
+
 def single_sale(request, pk_test):
     try:
         s_invoice_list = SaleInvoice.objects.get(id=pk_test)
         s_item_list = SaleItem.objects.filter(sales_invoice=pk_test)
-        total_sold_qty = s_item_list.aggregate(total_qty=Sum('qty'))[
-                             'total_qty'] or 0  # Calculate the sum of sold quantities
+        total_sold_qty = s_item_list.aggregate(total_qty=Sum('qty'))['total_qty'] or 0
 
-        context = {'s_invoice_list': s_invoice_list, 's_item_list': s_item_list,'total_sold_qty':total_sold_qty }
+        # Get the customer associated with the invoice
+        customer = s_invoice_list.customer_name
+
+        # Calculate the total invoice amount for the customer
+        total_invoice_amount = sum(
+            sale_item.total_amt for sale_item in SaleItem.objects.filter(sales_invoice__customer_name=customer)
+        )
+
+        # Calculate the total paid amount for the customer
+        total_paid_amount = sum(
+            payment.paid_amount for payment in Payment_Entry.objects.filter(sales_invoice__customer_name=customer)
+        )
+
+        # Calculate the actual credit for the customer
+        actual_credit = total_invoice_amount - total_paid_amount
+
+        context = {
+            's_invoice_list': s_invoice_list,
+            's_item_list': s_item_list,
+            'total_sold_qty': total_sold_qty,
+            'total_invoice_amount': total_invoice_amount,
+            'actual_credit': actual_credit
+        }
+
         return render(request, 'core/reports/single_sale_report.html', context)
     except:
         return render(request, 'core/reports/single_sale_report.html')
+
 
 
 def user_profile(request):

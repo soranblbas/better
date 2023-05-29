@@ -78,23 +78,23 @@ WSGI_APPLICATION = "better.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 #
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd2ba4gfrqnkpq4',
-        'USER': 'bliicstuxcjskh',
-        'PASSWORD': 'a3f554f3dbd79a48a2496afa68a89867461c3c14a84b70deb3255a60b1968a4a',
-        'HOST': 'ec2-3-83-61-239.compute-1.amazonaws.com',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'd2ba4gfrqnkpq4',
+#         'USER': 'bliicstuxcjskh',
+#         'PASSWORD': 'a3f554f3dbd79a48a2496afa68a89867461c3c14a84b70deb3255a60b1968a4a',
+#         'HOST': 'ec2-3-83-61-239.compute-1.amazonaws.com',
+#         'PORT': '5432',
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -144,12 +144,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-#         'LOCATION': 'my-cache-table',
-#     }
-# }
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my-cache-table',
+    }
+}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGOUT_REDIRECT_URL = '/'
