@@ -1,4 +1,4 @@
-from importlib.resources import _
+# from importlib.resources import _
 
 from django.contrib import admin
 from django.http import HttpResponseRedirect
@@ -43,6 +43,7 @@ class ProfileAdmin(admin.ModelAdmin):
                 return super().changeform_view(request, object_id=object_id, form_url=form_url,
                                                extra_context=extra_context)
             except ValueError as error:
+                from importlib.resources import _
                 self.message_user(request, _(str(error)), level='ERROR')
                 url = reverse('admin:%s_%s_change' % (self.opts.app_label, self.opts.model_name), args=[object_id])
                 return HttpResponseRedirect(url)
