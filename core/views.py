@@ -207,6 +207,7 @@ def employee_detail(request, pk):
 
 from django.db.models import Sum
 
+
 def single_sale(request, pk_test):
     try:
         s_invoice_list = SaleInvoice.objects.get(id=pk_test)
@@ -242,8 +243,13 @@ def single_sale(request, pk_test):
         return render(request, 'core/reports/single_sale_report.html')
 
 
-
 def user_profile(request):
     us_p = User.objects.all()
     context = {'us_p': us_p}
     return render(request, 'core/reports/users-profile.html', context)
+
+
+def price_list(request):
+    us_p = Item.objects.select_related()
+    context = {'us_p': us_p}
+    return render(request, 'core/reports/price_list.html', context)

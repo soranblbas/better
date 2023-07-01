@@ -21,5 +21,6 @@ urlpatterns = [
     path('journal-entries/', views.journal_entry_list, name='journal_entry_list'),
     path('single-sale/<str:pk_test>/', views.single_sale, name="single_sale"),
     path('user_profile/', views.user_profile, name='user_profile'),
+    path('price_list/', views.price_list, name='price_list'),
 
 ]
