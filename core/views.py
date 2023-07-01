@@ -85,11 +85,11 @@ def purchase_report(request):
 
 
 def payment_report(request):
-    payment_report = Payment_Entry.objects.select_related()
-    myFilter = Purchase_Filter(request.GET, queryset=payment_report)
+    payment_repoert = Payment_Entry.objects.select_related()
+    myFilter = Payment_Filter(request.GET, queryset=payment_repoert)
     payment_repoert = myFilter.qs
 
-    context = {'payment_report': payment_report, 'myFilter': myFilter}
+    context = {'payment_repoert': payment_repoert, 'myFilter': myFilter}
     return render(request, 'core/reports/payment_report.html', context)
 
 
