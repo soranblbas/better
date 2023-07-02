@@ -24,8 +24,9 @@
         <thead>
         <tr>
             <th style="text-align: center">تفاصيل المادة</th>
-            <th style="text-align: center"> الجملة</th>
-            <th style="text-align: center">السعر</th>
+            <th style="text-align: center">اسم المادة</th>
+            <th style="text-align: center"> السعر الجملة</th>
+
         </tr>
         </thead>
         <tbody>
@@ -33,7 +34,7 @@
             {% if i.price_list == "جملة" %}
                 <tr>
                     <td>{{ i.name }}</td>
-                    <td>{{ i.price_list }}</td>
+                    <td>{{ i.item_code }}</td>
                     <td>${{ i.price }}</td>
                 </tr>
             {% endif %}
