@@ -73,7 +73,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Item)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('name', 'price_list', 'price')
+    list_display = ('item_code','name', 'price_list', 'price')
     # list_filter = ("client_name", "status", "date_created")
     # list_display_links = ('client_name',)
     # list_per_page = 20

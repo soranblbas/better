@@ -12,7 +12,7 @@
            data-mdb-ripple-color="dark"
            onclick="printInvoice()"><i class="fas fa-print text-primary"></i> Print</a>
     </div>
-    <div class="container">
+    <div class="container" background-color="">
         <div class="card" dir="rtl" id="invoice-print-area">
 
             <div class="card-body">
@@ -55,14 +55,14 @@
                             <table dir="rtl">
                                 <thead class="text-white">
                                 <tr align="center">
-
-                                    <th style="color: black" scope="col">النوع</th>
+                                    <th style="color: black" scope="col">النوع/الكود</th>
+                                    <th style="color: black" scope="col">التفاصيل</th>
                                     <th style="color: black" scope="col">العدد</th>
                                     <th style="color: black" scope="col">السعر</th>
                                     <th style="color: black" scope="col">المجموع</th>
-                                    <th style="color: black" scope="col">نوع التخفیض</th>
-                                    <th style="color: black" scope="col">التخفيض</th>
-                                    <th style="color: black" scope="col">دینار/دۆلار</th>
+                                    {#                                    <th style="color: black" scope="col">نوع الخصم</th>#}
+                                    <th style="color: black" scope="col">الخصم</th>
+                                    <th style="color: black" scope="col">المجموع</th>
                                 </tr>
                                 </thead>
 
@@ -71,12 +71,12 @@
 
                                     <tbody>
                                     <tr align="center">
-
+                                        <td>{{ i.item.item_code }}</td>
                                         <td>{{ i.item.name }}</td>
                                         <td>{{ i.qty }}</td>
                                         <td>{{ i.item.price }}</td>
                                         <td>{{ i.sub_total }}</td>
-                                        <td>{{ i.discount_type }}</td>
+                                        {#                                        <td>{{ i.discount_type }}</td>#}
                                         <td>${{ i.discount_value }}</td>
                                         <td>${{ i.total_amt }}</td>
 
@@ -94,35 +94,80 @@
                             <div class="col-xl-8">
                                 <p style="font-size: 25px;" dir="rtl"> عدد المواد :{{ total_sold_qty }}</p>
                             </div>
-                            <div class="col-xl-3">
-
-                                <p class="text-black float-start"><span class="text-black me-3"></span><span
-                                        style="font-size: 25px;">${{ s_invoice_list.total_sales_amount }}</span></p>
-
-
-                            </div>
+                            {#                            <div class="col-xl-3">#}
+                            {##}
+                            {#                                <p class="text-black float-start"><span class="text-black me-3"></span><span#}
+                            {#                                        style="font-size: 25px;">${{ s_invoice_list.total_sales_amount }}</span></p>#}
+                            {##}
+                            {##}
+                            {#                            </div>#}
                         </div>
                         <hr>
                         <div class="row" dir="rtl">
                             <div class="col-xl-10">
                                 <p class="ms-3">تێبینی: {{ s_invoice_list.note }}</p>
                             </div>
+                            <div class="col-xl-10">
+                                <p class="ms-3" style="background-color: #00ff80">مجموع المبلغ
+                                    الكلى: {{ invoice_total }}</p>
+                            </div>
 
+                            <div class="col-xl-10">
+                                <p class="ms-3" style="background-color: #96c7e8">مجموع
+                                    الخصم: {{ invoice_discount|default_if_none:"0" }}</p>
+                            </div>
+
+
+                            <div class="col-xl-10">
+                                <p class="ms-3" style="background-color: #dcb92e">مجموع المبلغ
+                                    الصافي: {{ actual_invoice_total }}</p>
+                            </div>
                         </div>
 
                         <div class="row" dir="rtl">
                             <div class="col-xl-10">
-                                <p class="ms-3">الرصيد المتبقي: {{ actual_credit }}</p>
+                                <p class="ms-3" style="background-color: rgb(218,183,186)">الرصيد
+                                    المتبقي: {{ actual_credit }}</p>
                             </div>
 
                         </div>
 
                         <div class="row" dir="rtl">
                             <div class="col-xl-10">
-                                <p class="ms-3">اجماليى المبيعات: {{ total_invoice_amount }}</p>
+                                <p class="ms-3" style="background-color: #91efa8">اجماليى
+                                    المبيعات: {{ total_invoice_amount }}</p>
                             </div>
 
+
                         </div>
+                        <br>
+
+                        <style>
+                            .table-container {
+                                text-align: center;
+                            }
+
+                            .table-row {
+                                display: flex;
+                                justify-content: center;
+                            }
+
+                            .table-col {
+                                flex: 1;
+                            }
+                        </style>
+
+                        <div class="table-container">
+                            <div class="table-row">
+                                <div class="table-col">
+                                    الاسم والتوقيع المستلم
+                                </div>
+                                <div class="table-col">
+                                    الاسم والتوقيع مسئول المخزن
+                                </div>
+                            </div>
+                        </div>
+
                         <footer class="container">
                             <p class="pt-0"><img src="{% static 'core/assets/img/footer.jpg' %}">
 

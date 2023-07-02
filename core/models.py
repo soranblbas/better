@@ -160,8 +160,8 @@ class Item(models.Model):
         ('شراء', 'شراء'),
         ('قسط', 'قسط'),
     )
-
-    name = models.CharField(max_length=255)
+    item_code = models.CharField(max_length=50)
+    name = models.CharField(max_length=255,verbose_name='detail')
     price = models.PositiveIntegerField(default=1)
     price_list = models.CharField(max_length=8, choices=PRICELIST, default='مفرد')
 
@@ -169,7 +169,7 @@ class Item(models.Model):
         verbose_name_plural = 'المواد'
 
     def __str__(self):
-        return f"{self.name} - {self.price} - {self.price_list}"
+        return f"{self.name}-{self.item_code} - {self.price} - {self.price_list}"
 
 
 # Purchase Invoice

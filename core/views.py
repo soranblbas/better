@@ -230,17 +230,30 @@ def single_sale(request, pk_test):
         # Calculate the actual credit for the customer
         actual_credit = total_invoice_amount - total_paid_amount
 
+        # Calculate the total for each invoice
+        invoice_total = sum(s_item.sub_total for s_item in s_item_list)
+
+        # Calculate the total for each invoice
+        actual_invoice_total = sum(s_item.total_amt for s_item in s_item_list)
+
+        # Calculate the total invoice discount
+        invoice_discount = invoice_total - actual_invoice_total
+
         context = {
             's_invoice_list': s_invoice_list,
             's_item_list': s_item_list,
             'total_sold_qty': total_sold_qty,
             'total_invoice_amount': total_invoice_amount,
-            'actual_credit': actual_credit
+            'actual_credit': actual_credit,
+            'invoice_total': invoice_total,  # Add invoice total to the context
+            'invoice_discount': invoice_discount,  # Add invoice discount to the context
+            'actual_invoice_total': actual_invoice_total
         }
 
         return render(request, 'core/reports/single_sale_report.html', context)
     except:
-        return render(request, 'core/reports/single_sale_report.html')
+        return render(request, 'core/reports/single_sale_report.html',)
+
 
 
 def user_profile(request):
