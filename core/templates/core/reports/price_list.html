@@ -23,19 +23,22 @@
 
         <thead>
         <tr>
-            <th style="text-align: center">اسم المادة</th>
-            <th style="text-align: center">نوع السعر</th>
+            <th style="text-align: center">تفاصيل المادة</th>
+            <th style="text-align: center"> الجملة</th>
             <th style="text-align: center">السعر</th>
         </tr>
         </thead>
         <tbody>
         {% for i in us_p %}
-            <tr>
-                <td>{{ i.name }}</td>
-                <td>{{ i.price_list }}</td>
-                <td>${{ i.price }}</td>
-            </tr>
+            {% if i.price_list == "جملة" %}
+                <tr>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.price_list }}</td>
+                    <td>${{ i.price }}</td>
+                </tr>
+            {% endif %}
         {% endfor %}
+
         </tbody>
         <tfoot>
         </tfoot>
