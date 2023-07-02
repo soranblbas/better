@@ -33,17 +33,19 @@
                         <div class="row">
                             <div class="col-xl-8">
                                 <ul class="list-inline" dir="rtl">
-                                    <li class="list-inline-item text-muted">بەرێز: <span dir="rtl"
+                                    <li class="list-inline-item text-muted">السید: <span dir="rtl"
                                                                                          style="color:#000303 ;">{{ s_invoice_list.customer_name }}</span>
                                     </li> &nbsp;&nbsp;
-                                    <li class="list-inline-item text-muted">موبايل: <span dir="rtl"
+                                    <li class="list-inline-item text-muted">الموبایل: <span dir="rtl"
                                                                                           style="color:#000303 ;">{{ s_invoice_list.customer_name.customer_mobile }}</span>
                                     </li>
-                                    <li class="list-inline-item text-muted">بەروار: <span dir="rtl"
-                                                                                          style="color:#000303 ;">{{ s_invoice_list.date }}</span>
-                                    </li>&nbsp;
+<li class="list-inline-item text-muted">بەروار: <span dir="rtl" style="color:#000303;">
+    {{ s_invoice_list.date|date:"d,m,Y" }}__{{ s_invoice_list.date|date:"H:iA" }}
+</span></li>
 
-                                    <li class="list-inline-item text-muted">:ژ.پسولە <span dir="rtl"
+
+
+                                    <li class="list-inline-item text-muted">ر.الوصل :<span dir="rtl"
                                                                                            style="color:#000303 ;">{{ s_invoice_list.invoice_number }}</span>
                                     </li>
                                 </ul>
