@@ -117,7 +117,7 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Employee)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'email', 'phone_number', 'hire_date', 'job_title', 'department',)
+    list_display = ('first_name', 'last_name', 'birthdate', 'phone_number','relative_phone_number', 'hire_date', 'job_title', 'department',)
     list_display_links = ['first_name', ]
     list_filter = ('department', 'job_title',)
 

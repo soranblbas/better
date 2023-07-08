@@ -161,7 +161,7 @@ class Item(models.Model):
         ('قسط', 'قسط'),
     )
     item_code = models.CharField(max_length=50)
-    name = models.CharField(max_length=255,verbose_name='detail')
+    name = models.CharField(max_length=255, verbose_name='detail')
     price = models.PositiveIntegerField(default=1)
     price_list = models.CharField(max_length=8, choices=PRICELIST, default='مفرد')
 
@@ -348,8 +348,9 @@ class Inventory(models.Model):
 class Employee(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
-    email = models.EmailField()
+    birthdate = models.DateField()
     phone_number = models.CharField(max_length=20)
+    relative_phone_number = models.CharField(max_length=20)
     hire_date = models.DateField()
     job_title = models.CharField(max_length=50)
     department = models.CharField(max_length=50)
@@ -374,7 +375,7 @@ class Salary(models.Model):
 
 
 class JournalEntry(models.Model):
-    date = models.DateField(auto_now=True)
+    date = models.DateTimeField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
 
