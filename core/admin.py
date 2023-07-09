@@ -57,7 +57,7 @@ class PurchasesItem(admin.TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "item":
-            kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد','قسط' ,'جملة'])
+            kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'قسط', 'جملة'])
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -73,7 +73,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(Item)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('item_code','name', 'price_list', 'price')
+    list_display = ('item_code', 'name', 'price_list', 'price')
     list_filter = ("price_list",)
     # list_display_links = ('client_name',)
     list_per_page = 100
@@ -117,7 +117,9 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Employee)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'birthdate', 'phone_number','relative_phone_number', 'hire_date', 'job_title', 'department',)
+    list_display = (
+        'first_name', 'last_name', 'birthdate', 'phone_number', 'relative_phone_number', 'hire_date', 'job_title',
+        'department',)
     list_display_links = ['first_name', ]
     list_filter = ('department', 'job_title',)
 
@@ -134,6 +136,13 @@ class CustomerPagination(admin.ModelAdmin):
     list_display = ('customer_name', 'customer_mobile', 'customer_address', 'city',)
     list_display_links = ['customer_name', ]
     list_filter = ('city',)
+
+
+@admin.register(Attendance)
+class AttendanceAdmin(admin.ModelAdmin):
+    list_display = ('employee', 'date', 'status')
+    list_filter = ('date', 'status')
+    search_fields = ('employee__first_name', 'employee__last_name')
 
 
 admin.site.register(Vendor)

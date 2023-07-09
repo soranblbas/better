@@ -266,3 +266,8 @@ def price_list(request):
     us_p = Item.objects.select_related()
     context = {'us_p': us_p}
     return render(request, 'core/reports/price_list.html', context)
+
+
+def attendance_list(request):
+    attendances = Attendance.objects.all()
+    return render(request, 'core/reports/attendance_list.html', {'attendances': attendances})

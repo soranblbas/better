@@ -22,5 +22,6 @@ urlpatterns = [
     path('single-sale/<str:pk_test>/', views.single_sale, name="single_sale"),
     path('user_profile/', views.user_profile, name='user_profile'),
     path('price_list/', views.price_list, name='price_list'),
+    path('attendance_list/', views.attendance_list, name='attendance_list'),
 
 ]

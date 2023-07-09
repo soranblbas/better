@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -384,3 +386,20 @@ class JournalEntry(models.Model):
 
     class Meta:
         verbose_name_plural = ' المصاريف'
+
+
+class Attendance(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    date = models.DateField(default=datetime.now)
+    status = models.CharField(max_length=10, choices=(
+        ('Present', 'Present'),
+        ('Absent', 'Absent'),
+        ('Late', 'Late'),
+        ('Sick', 'Sick'),
+    ))
+
+    def __str__(self):
+        return f"{self.employee} - {self.date} - {self.status}"
+
+    class Meta:
+        verbose_name_plural = ' الغيابات'

@@ -15,44 +15,43 @@
         {#    table.table tfoot {#}
         {#        display: table-row-group;#}
         {#    }#}
-        {##}
-        {#        #}#}
+
+        #}#}
 
     </style>
-
-
-    <h2 class="text-center"> سجل الموضف </h2>
-    <table id="employee" class="table table-striped" style="background-color: #68a7e5">
+ <h2 class="text-center"> ملخص الغيابات الموضفين </h2>
+    <table id="absent" class="table table-striped" style="background-color: #68a7e5">
 
         <thead>
 
         <tr>
 
-
             <th>اسم الموضف</th>
-            <th>الموقع</th>
-            <th>تاریخ الولادە</th>
-            <th>الراتب</th>
+            <th>التاریخ</th>
+            <th>الحالة</th>
+
+
 
         </tr>
         </thead>
         <tbody>
+        {% for i in  attendances %}
+
+            <tr>
+                <td>{{ i.employee }}</td>
+                <td>{{ i.date }}</td>
+                <td>{{ i.status}}</td>
 
 
-        <tr>
-
-            <td>{{ employee.first_name }} {{ employee.last_name }} </td>
-            <td>{{ employee.department}} </td>
-            <td>{{ employee.birthdate }} </td>
-            <td>IQD{{ salary }} </td>
-
-
-        </tr>
-
+            </tr>
+        {% endfor %}
         </tbody>
         <tfoot>
 
         <th></th>
+        <th style="background-color: #e8c3c7"></th>
+         <th></th>
+
 
         </tfoot>
 
