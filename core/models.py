@@ -31,6 +31,7 @@ class Customer(models.Model):
     customer_mobile = models.CharField(max_length=50, blank=True)
     customer_address = models.TextField(blank=True)
     city = models.CharField(max_length=50, blank=True)
+    note = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = 'الزبائن'
@@ -145,6 +146,7 @@ class Payment_Entry(models.Model):
 class Unit(models.Model):
     title = models.CharField(max_length=50)
     short_name = models.CharField(max_length=50)
+    note = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = 'الوحدات'
@@ -166,6 +168,7 @@ class Item(models.Model):
     name = models.CharField(max_length=255, verbose_name='detail')
     price = models.FloatField(default=1)
     price_list = models.CharField(max_length=8, choices=PRICELIST, default='مفرد')
+    note = models.TextField(blank=True)
 
     class Meta:
         verbose_name_plural = 'المواد'
@@ -179,6 +182,8 @@ class Purchase(models.Model):
     invoice_number = models.CharField(max_length=8, unique=True, editable=False)
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     date = models.DateTimeField()
+    note = models.TextField(blank=True)
+
 
     class Meta:
         verbose_name_plural = ' فاتورة الشراء'
@@ -371,6 +376,8 @@ class Salary(models.Model):
 
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField(auto_now=True)
+    note = models.TextField(blank=True)
+
 
     def __str__(self):
         return f"{self.employee} - {self.amount} - {self.date}"
@@ -400,6 +407,8 @@ class Attendance(models.Model):
         ('Late', 'Late'),
         ('Sick', 'Sick'),
     ))
+    note = models.TextField(blank=True)
+
 
     def __str__(self):
         return f"{self.employee} - {self.date} - {self.status}"
