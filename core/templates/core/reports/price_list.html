@@ -1,5 +1,5 @@
-{% extends 'core/base.html' %}
-
+{% extends 'core/base2.html' %}
+{% load static %}
 {% block content %}
     <br>
     <br>
@@ -19,14 +19,12 @@
     </style>
 
     <h2 class="text-center">ملخص المبيعات</h2>
-    <table id="price_list" class="table table-striped" style="background-color: #68a7e5">
-
+    <table id="example" class="table table-striped" style="background-color: #68a7e5">
         <thead>
         <tr>
             <th style="text-align: center">تفاصيل المادة</th>
             <th style="text-align: center">اسم المادة</th>
-            <th style="text-align: center"> السعر الجملة</th>
-
+            <th style="text-align: center">السعر الجملة</th>
         </tr>
         </thead>
         <tbody>
@@ -39,9 +37,63 @@
                 </tr>
             {% endif %}
         {% endfor %}
-
         </tbody>
         <tfoot>
         </tfoot>
     </table>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                "pageLength": 50,
+
+                dom: 'Bfrtip',
+                buttons: [
+                    'excelHtml5',
+
+
+                    {
+
+
+                        extend: 'print',
+                        footer: true,
+                        title: '<p dir="rtl" class="pt-0"><img src="{% static 'core/assets/img/header.jpg' %}"> </p>',
+                        customize: function (win) {
+                            $(win.document.body)
+                                .css('font-size', '10pt')
+                                .prepend('<style>@media print { img { max-width: 100%; height: auto; } }</style>');
+
+                            $(win.document.body).find('table')
+                                .addClass('compact')
+                                .css('font-size', 'inherit');
+
+                            // Add footer with contact information and address
+                            {#var footer = '<div style="position: fixed; bottom: 0; width: 100%; text-align: center; dir: rtl;">' +#}
+                            {#    '<hr style="border-top: 5px solid darkblue; margin: 10px 0;">' +#}
+                            {#    '<div class="footer-contact" dir="rtl">' +#}
+                            {#    'معمل Work Fitness لتركيب و تجميع الطباخات<br>' +#}
+                            {#    'الهاتف: 07501131331 - 07504696061 - 077340303330' +#}
+                            {#    '</div>' +#}
+                            {#    '<div class="footer-address" dir="rtl">العنوان: اربيل - طريق گویر</div>' +#}
+                            {#    '</div>';#}
+                            {##}
+                            {#$(win.document.body).append(footer);#}
+                        }
+                    }
+                ],
+            });
+        });
+    </script>
 {% endblock %}
