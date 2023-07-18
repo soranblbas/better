@@ -164,7 +164,7 @@ class Item(models.Model):
     )
     item_code = models.CharField(max_length=50)
     name = models.CharField(max_length=255, verbose_name='detail')
-    price = models.PositiveIntegerField(default=1)
+    price = models.FloatField(default=1)
     price_list = models.CharField(max_length=8, choices=PRICELIST, default='مفرد')
 
     class Meta:
@@ -366,6 +366,9 @@ class Employee(models.Model):
 
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    fines = models.FloatField(default=0, blank=True)
+    slfa = models.FloatField(default=0, blank=True)
+
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField(auto_now=True)
 
