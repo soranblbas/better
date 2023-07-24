@@ -166,6 +166,7 @@ class Item(models.Model):
     )
     item_code = models.CharField(max_length=50)
     name = models.CharField(max_length=255, verbose_name='detail')
+    category = models.CharField(max_length=10, default='Test')
     price = models.FloatField(default=1)
     price_list = models.CharField(max_length=8, choices=PRICELIST, default='مفرد')
     note = models.TextField(blank=True)
@@ -183,7 +184,6 @@ class Purchase(models.Model):
     vendor = models.ForeignKey(Vendor, on_delete=models.CASCADE)
     date = models.DateTimeField()
     note = models.TextField(blank=True)
-
 
     class Meta:
         verbose_name_plural = ' فاتورة الشراء'
@@ -378,7 +378,6 @@ class Salary(models.Model):
     date = models.DateField(auto_now=True)
     note = models.TextField(blank=True)
 
-
     def __str__(self):
         return f"{self.employee} - {self.amount} - {self.date}"
 
@@ -390,6 +389,11 @@ class JournalEntry(models.Model):
     date = models.DateTimeField()
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
+    type = models.CharField(max_length=10, default='IQD',choices=(
+        ('IQD', 'IQD'),
+        ('$', 'Dollar'),
+
+    ))
 
     def __str__(self):
         return f"{self.date} - {self.amount} - {self.description}"
@@ -408,7 +412,6 @@ class Attendance(models.Model):
         ('Sick', 'Sick'),
     ))
     note = models.TextField(blank=True)
-
 
     def __str__(self):
         return f"{self.employee} - {self.date} - {self.status}"

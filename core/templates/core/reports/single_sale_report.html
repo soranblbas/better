@@ -62,7 +62,7 @@
                                     <th style="color: black" scope="col">العدد</th>
                                     <th style="color: black" scope="col">السعر</th>
                                     <th style="color: black" scope="col">المجموع</th>
-                                    {#                                    <th style="color: black" scope="col">نوع الخصم</th>#}
+                                                                        <th style="color: black" scope="col">نوع الخصم</th>
                                     <th style="color: black" scope="col">الخصم</th>
                                     <th style="color: black" scope="col">المجموع</th>
                                 </tr>
@@ -78,8 +78,8 @@
                                         <td>{{ i.qty }}</td>
                                         <td>{{ i.item.price }}</td>
                                         <td>{{ i.sub_total }}</td>
-                                        {#                                        <td>{{ i.discount_type }}</td>#}
-                                        <td>${{ i.discount_value }}</td>
+                                                                                <td>{{ i.discount_type }}</td>
+                                        <td>{{ i.discount_value }}</td>
                                         <td>${{ i.total_amt }}</td>
 
                                         <br>
