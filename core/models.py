@@ -166,9 +166,9 @@ class Item(models.Model):
     )
     item_code = models.CharField(max_length=50)
     name = models.CharField(max_length=255, verbose_name='detail')
-    category = models.CharField(max_length=10, default='Test')
+    category = models.CharField(max_length=30, default='Test')
     price = models.FloatField(default=1)
-    price_list = models.CharField(max_length=8, choices=PRICELIST, default='مفرد')
+    price_list = models.CharField(max_length=30, choices=PRICELIST, default='مفرد')
     note = models.TextField(blank=True)
 
     class Meta:
@@ -218,7 +218,7 @@ class SaleItem(models.Model):
     sale_date = models.DateTimeField(auto_now_add=True)
     is_returned = models.BooleanField(default=False)
     sub_total = models.FloatField(validators=[MinValueValidator(0.01)], default=0)
-    discount_type = models.CharField(max_length=10, choices=(
+    discount_type = models.CharField(max_length=30, choices=(
         ('amount', 'Amount'),
         ('percentage', 'Percentage')
     ), blank=True)
@@ -373,11 +373,11 @@ from decimal import Decimal
 
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    fines = models.DecimalField(max_digits=8, decimal_places=2, default=0, blank=True)
-    slfa = models.DecimalField(max_digits=8, decimal_places=2, default=0, blank=True)
+    fines = models.DecimalField(max_digits=30, decimal_places=2, default=0, blank=True)
+    slfa = models.DecimalField(max_digits=30, decimal_places=2, default=0, blank=True)
 
-    amount = models.DecimalField(max_digits=8, decimal_places=2)
-    final_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0, blank=True, null=True)
+    amount = models.DecimalField(max_digits=30, decimal_places=2)
+    final_amount = models.DecimalField(max_digits=30, decimal_places=2, default=0, blank=True, null=True)
     date = models.DateField(auto_now=True)
     note = models.TextField(blank=True)
 
@@ -403,9 +403,9 @@ class Salary(models.Model):
 
 class JournalEntry(models.Model):
     date = models.DateTimeField()
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=30, decimal_places=2)
     description = models.TextField()
-    type = models.CharField(max_length=10, default='IQD',choices=(
+    type = models.CharField(max_length=30, default='IQD',choices=(
         ('IQD', 'IQD'),
         ('$', 'Dollar'),
 
@@ -421,7 +421,7 @@ class JournalEntry(models.Model):
 class Attendance(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     date = models.DateField(default=datetime.now)
-    status = models.CharField(max_length=10, choices=(
+    status = models.CharField(max_length=30, choices=(
         ('Present', 'Present'),
         ('Absent', 'Absent'),
         ('Late', 'Late'),
