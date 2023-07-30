@@ -1,9 +1,11 @@
+
+
+
 {% extends 'core/base.html' %}
 
 
 {% block content %}
     <br>
-    <br> <br>    <br>
     <br> <br>
     <style>
         table, th, td {
@@ -21,41 +23,43 @@
 
     </style>
 
-    <h2 class="text-center"> قائمة الموضفين الشركة </h2>
-    <table id="employee" class="table table-striped" style="background-color: #68a7e5">
 
+    <h1>Employee Details with Salary</h1>
+    <table id="price_list" class="table table-striped" style="background-color: #68a7e5">
         <thead>
 
 
-
-
-            <th >معلومات الموضف</th>
-
-
+        <tr>
+            <th>Employee Name</th>
+            <th>Job Title</th>
+            <th>Department</th>
+            <th>Salary Amount</th>
+            <th>Final Salary Amount</th>
+            <th>Date</th>
+        </tr>
         </thead>
         <tbody>
-        {% for employee in  employees %}
 
-            <tr class="container" >
-
-                <td>
-                    <a href="{% url 'employee_detail' employee.pk %}">{{ employee.first_name }}
-                        {{ employee.last_name }} - Department of : {{ employee.department }}
-                        Email: {{ employee.email }}</a>
-                </td>
-
-
+        {% for employee in employees %}
+            <tr>
+                <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                <td>{{ employee.job_title }}</td>
+                <td>{{ employee.department }}</td>
+                {% with salary=employee.salary_set.last %}
+                    {% if salary %}
+                        <td>{{ salary.amount }}</td>
+                        <td>{{ salary.final_amount }}</td>
+                        <td>{{ salary.date }}</td>
+                    {% else %}
+                        <td>N/A</td>
+                        <td>N/A</td>
+                        <td>N/A</td>
+                    {% endif %}
+                {% endwith %}
             </tr>
+
         {% endfor %}
         </tbody>
-        <tfoot>
-
-        <th></th>
-
-        </tfoot>
-
-
     </table>
-
 
 {% endblock %}

@@ -369,17 +369,33 @@ class Employee(models.Model):
         verbose_name_plural = ' الموظفون'
 
 
+from decimal import Decimal
+
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    fines = models.FloatField(default=0, blank=True)
-    slfa = models.FloatField(default=0, blank=True)
+    fines = models.DecimalField(max_digits=8, decimal_places=2, default=0, blank=True)
+    slfa = models.DecimalField(max_digits=8, decimal_places=2, default=0, blank=True)
 
     amount = models.DecimalField(max_digits=8, decimal_places=2)
+    final_amount = models.DecimalField(max_digits=8, decimal_places=2, default=0, blank=True, null=True)
     date = models.DateField(auto_now=True)
     note = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.employee} - {self.amount} - {self.date}"
+
+    def save(self, *args, **kwargs):
+        # Convert float fields (if necessary) to Decimal before calculating final_amount
+        self.fines = Decimal(str(self.fines))
+        self.slfa = Decimal(str(self.slfa))
+        self.amount = Decimal(str(self.amount))
+
+        # Calculate the final salary after subtracting fines and slfa
+        total_salary = self.amount - self.fines - self.slfa
+        self.final_amount = total_salary
+
+        super().save(*args, **kwargs)
+
 
     class Meta:
         verbose_name_plural = ' الرواتب'

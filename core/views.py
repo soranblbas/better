@@ -174,7 +174,23 @@ def item_balance(request):
 
 def employee_list(request):
     employees = Employee.objects.all()
-    return render(request, 'core/reports/employee_list.html', {'employees': employees})
+
+    # Fetch salary details for each employee
+    employee_salary_details = {}
+    for employee in employees:
+        try:
+            salary = Salary.objects.filter(employee=employee).order_by('-date').first()
+            employee_salary_details[employee.id] = salary
+        except Salary.DoesNotExist:
+            # Handle the case when no salary entry is found for an employee
+            employee_salary_details[employee.id] = None
+
+    context = {
+        'employees': employees,
+        'employee_salary_details': employee_salary_details,
+    }
+
+    return render(request, 'core/reports/employee_list.html', context)
 
 
 def journal_entry_list(request):
@@ -252,8 +268,7 @@ def single_sale(request, pk_test):
 
         return render(request, 'core/reports/single_sale_report.html', context)
     except:
-        return render(request, 'core/reports/single_sale_report.html',)
-
+        return render(request, 'core/reports/single_sale_report.html', )
 
 
 def user_profile(request):
