@@ -33,9 +33,14 @@
             <th>Employee Name</th>
             <th>Job Title</th>
             <th>Department</th>
-            <th>Salary Amount</th>
-            <th>Final Salary Amount</th>
             <th>Date</th>
+            <th>Total Absent</th>
+            <th>Amount deducted per day</th>
+            <th>Slfa</th>
+            <th>Fines</th>
+
+            <th>Total salary</th>
+            <th>Final Salary Amount</th>
         </tr>
         </thead>
         <tbody>
@@ -47,9 +52,15 @@
                 <td>{{ employee.department }}</td>
                 {% with salary=employee.salary_set.last %}
                     {% if salary %}
+
+                        <td>{{ salary.date }}</td>
+                        <td>{{ salary.absent_days_count }}</td>
+                        <td>{{ salary.amount_deducted_per_day }}</td>
+                        <td>{{ salary.slfa }}</td>
+                        <td>{{ salary.fines }}</td>
                         <td>{{ salary.amount }}</td>
                         <td>{{ salary.final_amount }}</td>
-                        <td>{{ salary.date }}</td>
+
                     {% else %}
                         <td>N/A</td>
                         <td>N/A</td>
@@ -62,6 +73,10 @@
         </tbody>
         <tfoot>
 
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
         <th></th>
         <th></th>
         <th></th>

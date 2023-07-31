@@ -110,7 +110,7 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Salary)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('employee', 'amount','slfa','fines', 'date','final_amount')
+    list_display = ('employee', 'amount','slfa','fines','absent_days_count','amount_deducted_per_day', 'date','final_amount')
     list_display_links = ['employee', ]
     list_filter = ('employee',)
 
