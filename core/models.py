@@ -1,8 +1,9 @@
+import calendar
 from datetime import datetime
 
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Sum
 from django.utils.crypto import get_random_string
 import secrets
@@ -371,6 +372,7 @@ class Employee(models.Model):
 
 from decimal import Decimal
 
+
 class Salary(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     fines = models.DecimalField(max_digits=30, decimal_places=2, default=0, blank=True)
@@ -378,11 +380,25 @@ class Salary(models.Model):
 
     amount = models.DecimalField(max_digits=30, decimal_places=2)
     final_amount = models.DecimalField(max_digits=30, decimal_places=2, default=0, blank=True, null=True)
-    date = models.DateField(auto_now=True)
+    date = models.DateField()  # Remove auto_now=True
     note = models.TextField(blank=True)
 
     def __str__(self):
         return f"{self.employee} - {self.amount} - {self.date}"
+
+    def absent_days(self):
+        # Calculate the number of absent days for the employee
+        return Attendance.objects.filter(employee=self.employee, status='Absent').count()
+
+    @property
+    def amount_deducted_per_day(self):
+        # Calculate the amount deducted per absent day
+        total_salary = self.amount - self.fines - self.slfa
+        days_in_month = calendar.monthrange(self.date.year, self.date.month)[1] if self.date else 0
+        daily_salary = total_salary / Decimal(days_in_month) if days_in_month > 0 else 0
+
+        # Format the daily_salary to display only two digits after the decimal point
+        return '{:.4f}'.format(daily_salary)
 
     def save(self, *args, **kwargs):
         # Convert float fields (if necessary) to Decimal before calculating final_amount
@@ -392,10 +408,24 @@ class Salary(models.Model):
 
         # Calculate the final salary after subtracting fines and slfa
         total_salary = self.amount - self.fines - self.slfa
-        self.final_amount = total_salary
 
-        super().save(*args, **kwargs)
+        # Calculate the number of absent days for the employee
+        absent_days = Attendance.objects.filter(employee=self.employee, status='Absent').count()
 
+        # Get the number of days in the corresponding month if self.date is set
+        days_in_month = 0
+        if self.date:
+            days_in_month = calendar.monthrange(self.date.year, self.date.month)[1]
+
+        # Calculate the daily salary by dividing the total salary by the total days in the month (if available)
+        daily_salary = total_salary / Decimal(days_in_month) if days_in_month > 0 else 0
+
+        # Update the final_amount to be the daily salary multiplied by the number of absent days
+        self.final_amount = total_salary - (daily_salary * absent_days)
+
+        # Save the salary entry
+        with transaction.atomic():
+            super().save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = ' الرواتب'
@@ -405,7 +435,7 @@ class JournalEntry(models.Model):
     date = models.DateTimeField()
     amount = models.DecimalField(max_digits=30, decimal_places=2)
     description = models.TextField()
-    type = models.CharField(max_length=30, default='IQD',choices=(
+    type = models.CharField(max_length=30, default='IQD', choices=(
         ('IQD', 'IQD'),
         ('$', 'Dollar'),
 

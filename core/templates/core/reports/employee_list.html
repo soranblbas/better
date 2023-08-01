@@ -34,8 +34,13 @@
             <th>Job Title</th>
             <th>Department</th>
             <th>Salary Amount</th>
+
+            <th>Slfa</th>
+            <th>Absent</th>
+            <th>Amount Deducted per day</th>
             <th>Final Salary Amount</th>
             <th>Date</th>
+
         </tr>
         </thead>
         <tbody>
@@ -48,12 +53,16 @@
                 {% with salary=employee.salary_set.last %}
                     {% if salary %}
                         <td>{{ salary.amount }}</td>
+                        <td>{{ salary.slfa }}</td>
+                        <td>{{ salary.absent_days }}</td>
+                        <td>{{ salary.amount_deducted_per_day }}</td>
+
                         <td>{{ salary.final_amount }}</td>
                         <td>{{ salary.date }}</td>
                     {% else %}
-                        <td>N/A</td>
-                        <td>N/A</td>
-                        <td>N/A</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
                     {% endif %}
                 {% endwith %}
             </tr>
@@ -62,6 +71,9 @@
         </tbody>
         <tfoot>
 
+        <th></th>
+        <th></th>
+        <th></th>
         <th></th>
         <th></th>
         <th></th>
