@@ -5,20 +5,21 @@
     <br>
     <br> <br>
     <style>
+
         table, th, td {
             border: 0.5px solid;
             direction: rtl;
             text-align: center;
         }
 
-        {#@media print {#}
-        {#    table.table tfoot {#}
-        {#        display: table-row-group;#}
-        {#    }#}
 
-        #}#}
 
+        th {
+            text-align: center !important;
+        }
     </style>
+
+
 
 
     <h2 class="text-center"> ملخص المصاريف </h2>
@@ -41,7 +42,7 @@
         {% for i in  entries %}
 
             <tr>
-                <td>{{ i.date }}</td>
+                <td>{{ i.date|date:"d,m,Y" }}</td>
                 <td>{{ i.description }}</td>
                 <td>{{ i.amount }}</td>
                 <td>{{ i.type }}</td>
