@@ -37,12 +37,12 @@
                                                                                          style="color:#000303 ;">{{ s_invoice_list.customer_name }}</span>
                                     </li> &nbsp;&nbsp;
                                     <li class="list-inline-item text-muted">الموبایل: <span dir="rtl"
-                                                                                          style="color:#000303 ;">{{ s_invoice_list.customer_name.customer_mobile }}</span>
+                                                                                            style="color:#000303 ;">{{ s_invoice_list.customer_name.customer_mobile }}</span>
                                     </li>
-<li class="list-inline-item text-muted">بەروار: <span dir="rtl" style="color:#000303;">
+                                    <li class="list-inline-item text-muted">بەروار: <span dir="rtl"
+                                                                                          style="color:#000303;">
     {{ s_invoice_list.date|date:"d,m,Y" }}__{{ s_invoice_list.date|date:"H:iA" }}
 </span></li>
-
 
 
                                     <li class="list-inline-item text-muted">ر.الوصل :<span dir="rtl"
@@ -62,7 +62,7 @@
                                     <th style="color: black" scope="col">العدد</th>
                                     <th style="color: black" scope="col">السعر</th>
                                     <th style="color: black" scope="col">المجموع</th>
-                                                                        <th style="color: black" scope="col">نوع الخصم</th>
+                                    <th style="color: black" scope="col">نوع الخصم</th>
                                     <th style="color: black" scope="col">الخصم</th>
                                     <th style="color: black" scope="col">المجموع</th>
                                 </tr>
@@ -78,7 +78,7 @@
                                         <td>{{ i.qty }}</td>
                                         <td>{{ i.item.price }}</td>
                                         <td>{{ i.sub_total }}</td>
-                                                                                <td>{{ i.discount_type }}</td>
+                                        <td>{{ i.discount_type }}</td>
                                         <td>{{ i.discount_value }}</td>
                                         <td>${{ i.total_amt }}</td>
 
@@ -170,6 +170,16 @@
                             </div>
                         </div>
 
+                        <br>
+                        <br>
+                        <br> <br> <br>
+                        <br> <br> <br> <br>
+
+
+                        <br>
+                        <br>
+                        <br>
+
                         <footer class="container">
                             <p class="pt-0"><img src="{% static 'core/assets/img/footer.jpg' %}">
 
@@ -193,7 +203,7 @@
                     }
 
                     footer {
-                        position: fixed;
+                        position: page;
                         bottom: 0;
                         left: 0;
                         right: 0;

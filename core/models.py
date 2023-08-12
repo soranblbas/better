@@ -219,19 +219,17 @@ class SaleItem(models.Model):
     sale_date = models.DateTimeField(auto_now_add=True)
     is_returned = models.BooleanField(default=False)
     sub_total = models.FloatField(validators=[MinValueValidator(0.01)], default=0)
-    discount_type = models.CharField(max_length=30, choices=(
-        ('amount', 'Amount'),
+    discount_type = models.CharField(max_length=30, choices=(('amount', 'Amount'),
         ('percentage', 'Percentage')
-    ), blank=True)
-    discount_value = models.FloatField(blank=True, null=True)
+    ), default='percentage', editable=False)
+    discount_value = models.FloatField(blank=True, null=True, verbose_name='Discount Percentage')
 
     def save(self, *args, **kwargs):
 
         self.sub_total = self.item.price * self.qty
-        if self.discount_type == 'amount' and self.discount_value is not None:
-            discount = self.discount_value
-        elif self.discount_type == 'percentage' and self.discount_value is not None:
-            discount = self.item.price * self.discount_value / 100
+
+        if self.discount_type == 'percentage' and self.discount_value is not None:
+            discount = self.sub_total * self.discount_value / 100
         else:
             discount = 0
 
@@ -271,13 +269,8 @@ class SaleItem(models.Model):
         )
 
     def clean(self):
-        # if self.item.price_list != 'مفرد':
-        #     raise ValidationError('Price list should  be " مفرد or جملة"')
-
         if self.is_returned and self.qty == 0:
             raise ValidationError('Quantity should be greater than zero when returning items.')
-        if not self.discount_type and self.discount_value:
-            raise ValidationError('Please select a discount type')
 
         if self.is_returned and self.sales_invoice.status != "المردود":
             raise ValidationError('تکایە مەردود هەلبژيرە')
