@@ -176,7 +176,7 @@ class Item(models.Model):
         verbose_name_plural = 'المواد'
 
     def __str__(self):
-        return f"{self.name}-{self.item_code} - {self.price} - {self.price_list}"
+        return f"{self.item_code}"
 
 
 # Purchase Invoice
@@ -220,8 +220,8 @@ class SaleItem(models.Model):
     is_returned = models.BooleanField(default=False)
     sub_total = models.FloatField(validators=[MinValueValidator(0.01)], default=0)
     discount_type = models.CharField(max_length=30, choices=(('amount', 'Amount'),
-        ('percentage', 'Percentage')
-    ), default='percentage', editable=False)
+                                                             ('percentage', 'Percentage')
+                                                             ), default='percentage', editable=False)
     discount_value = models.FloatField(blank=True, null=True, verbose_name='Discount Percentage')
 
     def save(self, *args, **kwargs):
