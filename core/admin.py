@@ -5,13 +5,29 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from .models import *
+from django import forms
 
 
 # Register your models here.
+# class SaleItemInlineForm(forms.ModelForm):
+#     manual_item_input = forms.CharField(max_length=255, required=False, label='Enter Item Details')
+#
+#     class Meta:
+#         model = SaleItem
+#         fields = '__all__'
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['item'].queryset = Item.objects.exclude(price_list='شراء')
+
 
 class SalesItem(admin.TabularInline):
+    # form = SaleItemInlineForm
     model = SaleItem
     extra = 1
+    template = "admin/common_item_inline.html"  # Path to your common template
+
+    autocomplete_fields = ['item']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "item":
@@ -54,6 +70,9 @@ class ProfileAdmin(admin.ModelAdmin):
 class PurchasesItem(admin.TabularInline):
     model = PurchaseItem
     extra = 1
+    template = "admin/common_item_inline.html"  # Path to your common template
+
+    autocomplete_fields = ['item']
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "item":
@@ -77,6 +96,7 @@ class CustomerPagination(admin.ModelAdmin):
     list_filter = ("price_list",)
     # list_display_links = ('client_name',)
     list_per_page = 100
+    search_fields = ['item_code', ]  # Define the search fields for the autocomplete functionality
 
 
 # @admin.register(Purchase)
@@ -110,7 +130,8 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Salary)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('employee', 'amount','slfa','fines','absent_days','amount_deducted_per_day', 'date','final_amount')
+    list_display = (
+        'employee', 'amount', 'slfa', 'fines', 'absent_days', 'amount_deducted_per_day', 'date', 'final_amount')
     list_display_links = ['employee', ]
     list_filter = ('employee',)
 

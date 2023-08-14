@@ -1,0 +1,9 @@
+{% extends "admin/edit_inline/tabular.html" %}
+
+{% block field_sets %}
+    <div class="inline-related manual-item-input">
+        <label for="{{ inline_admin_formset.formset.prefix }}-manual_item_input">Enter Item Details:</label>
+        <input type="text" id="{{ inline_admin_formset.formset.prefix }}-manual_item_input" name="{{ inline_admin_formset.formset.prefix }}-0-manual_item_input" maxlength="255">
+    </div>
+    {{ block.super }}
+{% endblock %}

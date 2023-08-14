@@ -288,7 +288,7 @@ class PurchaseItem(models.Model):
     # price = models.FloatField()
     total_amt = models.FloatField(editable=False, default=0)
     pur_date = models.DateTimeField(auto_now_add=True)
-    note = models.TextField(blank=True)
+    note = models.TextField(max_length=100,blank=True)
 
     def save(self, *args, **kwargs):
         self.total_amt = self.qty * self.item.price
