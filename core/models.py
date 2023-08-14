@@ -176,7 +176,7 @@ class Item(models.Model):
         verbose_name_plural = 'المواد'
 
     def __str__(self):
-        return f"{self.item_code}"
+        return f"{self.item_code} - { self.price_list}"
 
 
 # Purchase Invoice
