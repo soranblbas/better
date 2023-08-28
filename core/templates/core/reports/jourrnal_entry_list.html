@@ -1,66 +1,109 @@
-{% extends 'core/base.html' %}
-
+{% extends 'core/base2.html' %}
 
 {% block content %}
-    <br>
-    <br> <br>
-    <style>
+<br>
+<br>
+<br>
+<style>
+    table, th, td {
+        border: 0.5px solid;
+        direction: rtl;
+        text-align: center;
+    }
 
-        table, th, td {
-            border: 0.5px solid;
-            direction: rtl;
-            text-align: center;
-        }
+    th {
+        text-align: center !important;
+    }
+</style>
 
-
-
-        th {
-            text-align: center !important;
-        }
-    </style>
-
-
-
-
-    <h2 class="text-center"> ملخص المصاريف </h2>
-    <table id="expense" class="table table-striped" style="background-color: #68a7e5">
-
-        <thead>
-
+<h2 class="text-center">ملخص المصاريف</h2>
+<table id="expense1" class="table table-striped" style="background-color: #68a7e5">
+    <thead>
         <tr>
-
-
             <th>التاريخ</th>
-            <th>الملاحضة</th>
+            <th>الملاحظة</th>
             <th>نسبة</th>
             <th>النوع</th>
-
-
         </tr>
-        </thead>
-        <tbody>
-        {% for i in  entries %}
-
-            <tr>
-                <td>{{ i.date|date:"d,m,Y" }}</td>
-                <td>{{ i.description }}</td>
-                <td>{{ i.amount }}</td>
-                <td>{{ i.type }}</td>
-
-
-            </tr>
+    </thead>
+    <tbody>
+        {% for i in entries %}
+        <tr>
+            <td>{{ i.date|date:"d,m,Y" }}</td>
+            <td>{{ i.description }}</td>
+            <td>{{ i.amount }}</td>
+            <td>{{ i.type }}</td>
+        </tr>
         {% endfor %}
-        </tbody>
-        <tfoot>
-
+    </tbody>
+<tfoot>
+    <tr>
+        <th></th>
+        <th>Total:</th>
         <th></th>
         <th></th>
-        <th style="background-color: #dc8088"></th>
+    </tr>
+</tfoot>
 
-        </tfoot>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+<script>
+$(document).ready(function () {
+    var table = $('#expense1').DataTable({
+        "pageLength": 50,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'excel',
+                footer: false, // Exclude footer from export
+                title: 'Expense Report',
+                customize: function (xlsx) {
+                    var sheet = xlsx.xl.worksheets['sheet1.xml'];
+                    $('row:first c', sheet).attr('s', '42');
+                }
+            }
+        ],
+        drawCallback: function () {
+            var api = this.api();
+            var data = api.column(2, { page: 'current' }).data();
+
+            var subtotal = data.reduce(function (a, b) {
+                return parseFloat(a) + parseFloat(b);
+            }, 0);
+
+            var formattedSubtotal = parseFloat(subtotal).toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+            $(api.column(2).footer()).html('Subtotal: ' + formattedSubtotal);
+
+            // Calculate and display grand total
+            var totalSum = api.column(2).data().reduce(function (a, b) {
+                return parseFloat(a) + parseFloat(b);
+            }, 0);
+
+            var formattedTotal = parseFloat(totalSum).toLocaleString(undefined, { minimumFractionDigits: 2 });
+
+            $(api.column(3).footer()).html('Grand Total: ' + formattedTotal);
+        },
+        columnDefs: [
+            {
+                targets: 1,
+                className: "my-class"
+            }
+        ]
+    });
+});
 
 
-    </table>
 
-
+</script>
 {% endblock %}
