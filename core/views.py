@@ -153,11 +153,12 @@ def customer_total_report_summary(request):
 
 
 def item_balance(request):
-    items = Inventory.objects.values('item__name').annotate(
+    items = Inventory.objects.values('item__item_code','item__name').annotate(
         pur_qty=Sum('pur_qty'),
         sale_qty=Sum('sale_qty'),
         return_qty=Sum('return_qty')
     )
+
 
     for item in items:
         if item['pur_qty'] and item['sale_qty'] and item['return_qty'] is not None:
