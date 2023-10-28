@@ -21,6 +21,10 @@
     <orderEntry type="library" name="64d58efce2" level="application" />
     <orderEntry type="library" name="jquery-3.7.0" level="application" />
     <orderEntry type="library" name="buttons.flash" level="application" />
+    <orderEntry type="library" name="jquery-3.7.0" level="application" />
+    <orderEntry type="library" name="jszip" level="application" />
+    <orderEntry type="library" name="pdfmake" level="application" />
+    <orderEntry type="library" name="buttons.html5" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
