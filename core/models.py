@@ -10,6 +10,17 @@ import secrets
 from django.core.exceptions import ValidationError
 
 
+class Warehouse(models.Model):
+    name = models.CharField(max_length=50)
+    address = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name_plural = 'المستودعات'
+
+    def __str__(self):
+        return self.name
+
+
 # Vendor
 class Vendor(models.Model):
     full_name = models.CharField(max_length=50)
@@ -176,7 +187,7 @@ class Item(models.Model):
         verbose_name_plural = 'المواد'
 
     def __str__(self):
-        return f"{self.item_code} - { self.price_list}"
+        return f"{self.item_code}"
 
 
 # Purchase Invoice
@@ -213,6 +224,8 @@ class Purchase(models.Model):
 # Sales Item
 class SaleItem(models.Model):
     sales_invoice = models.ForeignKey(SaleInvoice, on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,default="Test")  # Add this field
+
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     qty = models.PositiveSmallIntegerField(default=1)
     total_amt = models.FloatField(editable=False, default=0)
@@ -243,9 +256,10 @@ class SaleItem(models.Model):
         super().save(*args, **kwargs)
 
         try:
-            inventory = Inventory.objects.filter(item__name=self.item.name).latest('id')
+
+            inventory = Inventory.objects.filter(item__item_code=self.item, warehouse__name=self.warehouse.name).latest('id')
         except Inventory.DoesNotExist:
-            raise ValueError(f"{self.item.name} is not in stock")
+            raise ValueError(f"{self.item} is not in stock")
 
         totalBal = inventory.total_bal_qty
 
@@ -261,6 +275,7 @@ class SaleItem(models.Model):
         Inventory.objects.create(
             item=self.item,
             purchase=None,
+            warehouse=self.warehouse,
             sale=self.sales_invoice,
             pur_qty=None,
             sale_qty=sale_qty,
@@ -282,19 +297,22 @@ class SaleItem(models.Model):
 # Purchased Item
 class PurchaseItem(models.Model):
     purchase_invoice = models.ForeignKey(Purchase, on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,default="Test")  # Add this field
+
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     qty = models.FloatField()
     # item_price = models.ForeignKey(ItemPrice, on_delete=models.CASCADE)
-    # price = models.FloatField()
+    price = models.PositiveSmallIntegerField(default=1)
     total_amt = models.FloatField(editable=False, default=0)
     pur_date = models.DateTimeField(auto_now_add=True)
-    note = models.TextField(max_length=100,blank=True)
+    note = models.TextField(max_length=100, blank=True)
 
     def save(self, *args, **kwargs):
-        self.total_amt = self.qty * self.item.price
+        self.total_amt = self.qty * self.price
         super(PurchaseItem, self).save(*args, **kwargs)
 
-        inventory = Inventory.objects.filter(item__name=self.item.name).order_by('-id').first()
+        inventory = Inventory.objects.filter(item__item_code=self.item.item_code, warehouse__name=self.warehouse).order_by(
+            '-id').first()
         if inventory:
             totalBal = inventory.total_bal_qty + self.qty
         else:
@@ -302,15 +320,16 @@ class PurchaseItem(models.Model):
         Inventory.objects.create(
             item=self.item,
             purchase=self.purchase_invoice,
+            warehouse=self.warehouse,
             sale=None,
             pur_qty=self.qty,
             sale_qty=None,
             total_bal_qty=totalBal
         )
 
-    def clean(self):
-        if self.item.price_list != 'شراء':
-            raise ValidationError('Price list should be "شراء"')
+    # def clean(self):
+    #     if self.item.price_list != 'شراء':
+    #         raise ValidationError('Price list should be "شراء"')
 
     class Meta:
         verbose_name_plural = ' العنصر الذي تم شراؤه'
@@ -319,6 +338,7 @@ class PurchaseItem(models.Model):
 # Inventories
 class Inventory(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, null=True)
     purchase = models.ForeignKey(Purchase, on_delete=models.CASCADE, default=0, null=True)
     sale = models.ForeignKey(SaleInvoice, on_delete=models.CASCADE, default=0, null=True)
     pur_qty = models.FloatField(default=0, null=True)

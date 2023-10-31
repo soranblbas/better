@@ -29,6 +29,7 @@
             <th>الكمية المباعة</th>
             <th>كمية الإرجاع</th>
             <th>الرصيد</th>
+            <th>warehouse</th>
         </tr>
         </thead>
         <tbody>
@@ -41,6 +42,8 @@
                 <td>{{ item.sale_qty }}</td>
                 <td>{{ item.return_qty }}</td>
                 <td>{{ item.balance }}</td>
+                            <td>{{ item.warehouse__name }}</td>
+
             </tr>
         {% endfor %}
         </tbody>

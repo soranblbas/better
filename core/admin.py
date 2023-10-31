@@ -1,4 +1,6 @@
 # from importlib.resources import _
+from django.db.models import Q
+from django.utils.translation import gettext as _
 
 from django.contrib import admin
 from django.http import HttpResponseRedirect
@@ -31,7 +33,7 @@ class SalesItem(admin.TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "item":
-            kwargs["queryset"] = Item.objects.exclude(price_list='شراء')
+            kwargs["queryset"] = Item.objects.filter(price_list='مفرد')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     readonly_fields = ('sub_total',)
@@ -53,19 +55,19 @@ class ProfileAdmin(admin.ModelAdmin):
         'updated_at',)
     list_filter = ('status',)
 
+
+
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
         if request.method == 'POST':
             try:
                 return super().changeform_view(request, object_id=object_id, form_url=form_url,
                                                extra_context=extra_context)
             except ValueError as error:
-                from importlib.resources import _
                 self.message_user(request, _(str(error)), level='ERROR')
                 url = reverse('admin:%s_%s_change' % (self.opts.app_label, self.opts.model_name), args=[object_id])
                 return HttpResponseRedirect(url)
         else:
             return super().changeform_view(request, object_id=object_id, form_url=form_url, extra_context=extra_context)
-
 
 class PurchasesItem(admin.TabularInline):
     model = PurchaseItem
@@ -74,11 +76,11 @@ class PurchasesItem(admin.TabularInline):
 
     autocomplete_fields = ['item']
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "item":
-            kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'قسط', 'جملة'])
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "item":
+    #         kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'قسط', 'جملة'])
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    #
 
 @admin.register(Purchase)
 class ProfileAdmin(admin.ModelAdmin):
@@ -124,8 +126,24 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Inventory)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('item', 'purchase', 'sale', 'pur_qty', 'sale_qty', 'return_qty', 'total_bal_qty')
+    list_display = ('item','warehouse', 'purchase', 'sale', 'pur_qty', 'sale_qty', 'return_qty', 'total_bal_qty')
     list_display_links = ['purchase', 'sale', ]
+    search_fields = ['item__item_code', 'item__name', 'warehouse__name']
+
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+
+        search_terms = search_term.split(';')
+
+        if len(search_terms) > 1:
+            query = Q()
+            for term in search_terms:
+                query |= Q(item__item_code__icontains=term.strip()) | Q(item__name__icontains=term.strip()) | Q(
+                    warehouse__name__icontains=term.strip())
+
+            queryset = queryset.filter(query)
+
+        return queryset, use_distinct
 
 
 @admin.register(Salary)
@@ -168,7 +186,7 @@ class AttendanceAdmin(admin.ModelAdmin):
 
 admin.site.register(Vendor)
 admin.site.register(Unit)
-# admin.site.register(ItemDetail)
+admin.site.register(Warehouse)
 
 
 admin.site.register(JournalEntry)
