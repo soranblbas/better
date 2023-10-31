@@ -33,8 +33,9 @@ class SalesItem(admin.TabularInline):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "item":
-            kwargs["queryset"] = Item.objects.filter(price_list='مفرد')
+            kwargs["queryset"] = Item.objects.exclude(price_list='شراء')
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
 
     readonly_fields = ('sub_total',)
 
@@ -76,10 +77,10 @@ class PurchasesItem(admin.TabularInline):
 
     autocomplete_fields = ['item']
 
-    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
-    #     if db_field.name == "item":
-    #         kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'قسط', 'جملة'])
-    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "item":
+            kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'قسط', 'جملة'])
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
     #
 
 @admin.register(Purchase)
@@ -165,7 +166,7 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Payment_Entry)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('sales_invoice', 'paid_amount', 'q_type', 'payment_date', 'note',)
+    list_display = ('sales_invoice', 'paid_amount', 'q_type', 'payment_date', 'note','discount_amount')
     list_display_links = ['sales_invoice', ]
     list_filter = ('sales_invoice',)
 

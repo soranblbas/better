@@ -96,30 +96,30 @@ class SaleInvoice(models.Model):
     #     if not sale_items:
     #         raise ValidationError("At least one item must be selected for the invoice.")
 
-
 class Payment_Entry(models.Model):
     Qst = (
         ('نقد', 'نقد'),
-        ('قستی ١', 'قستی ١'),
-        ('قستی ٢', 'قستی ٢'),
-        ('قستی ٣ ', ' قستی ٣'),
-        ('قستی ٤', 'قستی ٤'),
-        ('قستی ٥', 'قستی ٥'),
-        ('قستی ٦ ', ' قستی ٦'),
-        ('قستی ٧', 'قستی ٧'),
-        ('قستی ٨', 'قستی ٨'),
-        ('قستی ٩ ', ' قستی ٩'),
-        ('قستی ١٠', 'قستی ١٠'),
-        ('قستی ١١', 'قستی ١١'),
-        ('قستی ١٢ ', ' قستی ١٢'),
+        ('قسطی ١', 'قسطی ١'),
+        ('قسطی ٢', 'قسطی ٢'),
+        ('قسطی ٣ ', 'قسطی ٣'),
+        ('قسطی ٤', 'قسطی ٤'),
+        ('قسطی ٥', 'قسطی ٥'),
+        ('قسطی ٦ ', 'قسطی ٦'),
+        ('قسطی ٧', 'قسطی ٧'),
+        ('قسطی ٨', 'قسطی ٨'),
+        ('قسطی ٩ ', 'قسطی ٩'),
+        ('قسطی ١٠', 'قسطی ١٠'),
+        ('قسطی ١١', 'قسطی ١١'),
+        ('قسطی ١٢ ', 'قسطی ١٢'),
     )
 
     invoice_number = models.CharField(unique=True, editable=False, max_length=10)
     sales_invoice = models.ForeignKey(SaleInvoice, on_delete=models.CASCADE)
-    # customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
     q_type = models.CharField(max_length=10, verbose_name="Payment type", choices=Qst, blank=False)
 
     paid_amount = models.FloatField(validators=[MinValueValidator(0.01)], default=1)
+
+    discount_amount = models.FloatField(default=0)  # Add this field
 
     payment_date = models.DateTimeField(blank=False)
     note = models.CharField(max_length=100, blank=True)
@@ -146,6 +146,10 @@ class Payment_Entry(models.Model):
                 # Increment the highest invoice number by 1 and add prefix
                 prefix, number = highest.split('-')
                 self.invoice_number = prefix + '-' + str(int(number) + 1)
+
+        # Apply discount if provided
+        self.paid_amount -= self.discount_amount
+
         super().save(*args, **kwargs)
 
 
@@ -177,7 +181,7 @@ class Item(models.Model):
         ('قسط', 'قسط'),
     )
     item_code = models.CharField(max_length=50)
-    name = models.CharField(max_length=255, verbose_name='detail')
+    name = models.CharField(max_length=255)
     category = models.CharField(max_length=30, default='Test')
     price = models.FloatField(default=1)
     price_list = models.CharField(max_length=30, choices=PRICELIST, default='مفرد')
@@ -187,7 +191,7 @@ class Item(models.Model):
         verbose_name_plural = 'المواد'
 
     def __str__(self):
-        return f"{self.item_code}"
+        return f"{self.name} - {self.price} - {self.price_list}"
 
 
 # Purchase Invoice
@@ -257,7 +261,7 @@ class SaleItem(models.Model):
 
         try:
 
-            inventory = Inventory.objects.filter(item__item_code=self.item, warehouse__name=self.warehouse.name).latest('id')
+            inventory = Inventory.objects.filter(item__name=self.item.name, warehouse__name=self.warehouse.name).latest('id')
         except Inventory.DoesNotExist:
             raise ValueError(f"{self.item} is not in stock")
 
@@ -302,16 +306,16 @@ class PurchaseItem(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     qty = models.FloatField()
     # item_price = models.ForeignKey(ItemPrice, on_delete=models.CASCADE)
-    price = models.PositiveSmallIntegerField(default=1)
+    # price = models.PositiveSmallIntegerField(default=1)
     total_amt = models.FloatField(editable=False, default=0)
     pur_date = models.DateTimeField(auto_now_add=True)
     note = models.TextField(max_length=100, blank=True)
 
     def save(self, *args, **kwargs):
-        self.total_amt = self.qty * self.price
+        self.total_amt = self.qty * self.item.price
         super(PurchaseItem, self).save(*args, **kwargs)
 
-        inventory = Inventory.objects.filter(item__item_code=self.item.item_code, warehouse__name=self.warehouse).order_by(
+        inventory = Inventory.objects.filter(item__name=self.item.name, warehouse__name=self.warehouse).order_by(
             '-id').first()
         if inventory:
             totalBal = inventory.total_bal_qty + self.qty
