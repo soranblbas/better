@@ -191,7 +191,7 @@ class Item(models.Model):
         verbose_name_plural = 'المواد'
 
     def __str__(self):
-        return f"{self.name} - {self.price} - {self.price_list}"
+        return f"{self.item_code} - {self.price} - {self.price_list}"
 
 
 # Purchase Invoice
@@ -261,7 +261,7 @@ class SaleItem(models.Model):
 
         try:
 
-            inventory = Inventory.objects.filter(item__name=self.item.name, warehouse__name=self.warehouse.name).latest('id')
+            inventory = Inventory.objects.filter(item__item_code=self.item.item_code, warehouse__name=self.warehouse.name).latest('id')
         except Inventory.DoesNotExist:
             raise ValueError(f"{self.item} is not in stock")
 
@@ -315,7 +315,7 @@ class PurchaseItem(models.Model):
         self.total_amt = self.qty * self.item.price
         super(PurchaseItem, self).save(*args, **kwargs)
 
-        inventory = Inventory.objects.filter(item__name=self.item.name, warehouse__name=self.warehouse).order_by(
+        inventory = Inventory.objects.filter(item__item_code=self.item.item_code, warehouse__name=self.warehouse).order_by(
             '-id').first()
         if inventory:
             totalBal = inventory.total_bal_qty + self.qty
