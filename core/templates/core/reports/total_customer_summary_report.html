@@ -1,11 +1,13 @@
 {% extends 'core/base.html' %}
 
-
 {% block content %}
     <br>
-    <br> <br>
+    <br>
+    <br>
     <style>
-        table, th, td {
+        table,
+        th,
+        td {
             border: 0.5px solid;
             direction: rtl;
             text-align: center;
@@ -17,54 +19,47 @@
 
     </style>
 
-    <h2> ملخص كشف العملاء</h2>
+    <h2>ملخص كشف العملاء</h2>
     <table id="example7" class="table table-striped" style="background-color: #68a7e5">
 
         <thead>
-
-        <tr>
-
-            <th>اسم العميل</th>
-            <th>المبيعات</th>
-            <th>التسديدات</th>
-            <th> الرصيد قبل الدفعة الأخيرة</th>
-            <th> اخر‌التسديدات</th>
-            <th>المتبقي</th>
-            <th>موبایل</th>
-
-
-        </tr>
+            <tr>
+                <th>اسم العميل</th>
+                <th>المبيعات الإجمالية</th>
+                <th>التسديدات الإجمالية</th>
+                <th>الرصيد قبل الدفعة الأخيرة</th>
+                <th>الدفعة الأخيرة</th>
+                <th>الرصيد الفعلي</th>
+                <th>الرصيد النهائي</th>
+                <th>موبايل</th>
+                <th>رصيد افتتاحي</th>
+            </tr>
         </thead>
         <tbody>
-        {% for customer, data in c_balance_report.items %}
-            <tr>
-                <td>{{ customer }}</td>
-                <td>{{ data.total_invoice_amount }}</td>
-                <td>{{ data.total_paid_amount }}</td>
-                <td>{{ data.balance_before_last_payment }}</td>
-                <td>{{ data.last_payment }}</td>
-                <td>{{ data.actual_credit }}</td>
-                <td>{{ data.phone_number }}</td>
-
-            </tr>
-        {% endfor %}
+            {% for customer, data in c_balance_report.items %}
+                <tr>
+                    <td>{{ customer }}</td>
+                    <td>{{ data.total_invoice_amount }}</td>
+                    <td>{{ data.total_paid_amount }}</td>
+                    <td>{{ data.balance_before_last_payment }}</td>
+                    <td>{{ data.last_payment }}</td>
+                    <td>{{ data.actual_credit }}</td>
+                    <td>{{ data.final_balance }}</td>
+                    <td>{{ data.phone_number }}</td>
+                    <td>{{ data.opening_balance }}</td>
+                </tr>
+            {% endfor %}
         </tbody>
         <tfoot>
-
-        <th></th>
-
-        <th style="background-color: #beecc8"></th>
-        <th style="background-color: #beecc8"></th>
-
-        <th style="background-color: #e8c3c7"></th>
-        <th style="background-color: #e8c3c7"></th>
-
-
+            <th></th>
+            <th style="background-color: #beecc8"></th>
+            <th style="background-color: #beecc8"></th>
+            <th style="background-color: #e8c3c7"></th>
+            <th style="background-color: #e8c3c7"></th>
+            <th style="background-color: #d4a3af"></th>
+            <th style="background-color: #a7c5eb"></th>
+            <th></th>
+            <th style="background-color: #c7dfdd"></th>
         </tfoot>
-
-
     </table>
-
-
-
 {% endblock %}

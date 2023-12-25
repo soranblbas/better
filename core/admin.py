@@ -191,6 +191,8 @@ admin.site.register(Warehouse)
 
 
 admin.site.register(JournalEntry)
+admin.site.register(OpeningBalance)
+
 
 admin.site.site_header = "Better Cooking Admin"
 admin.site.site_title = "Better Cooking Admin Portal"

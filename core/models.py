@@ -481,3 +481,14 @@ class Attendance(models.Model):
 
     class Meta:
         verbose_name_plural = ' الغيابات'
+
+
+class OpeningBalance(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='opening_balances')
+    balance_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    date_created = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Opening Balance for {self.customer.customer_name}: {self.balance_amount} ({self.date_created})"
+    class Meta:
+        verbose_name_plural = ' رصيد افتتاحي'
