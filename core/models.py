@@ -59,12 +59,18 @@ class SaleInvoice(models.Model):
         ('المردود', 'المردود'),
 
     )
+    STATUS1 = (
+        ('IQD', 'IQD'),
+        ('$', '$'),
+
+    )
     invoice_number = models.CharField(max_length=8, unique=True, editable=False)
     customer_name = models.ForeignKey(Customer, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=STATUS, default='مدفوع')
     note = models.CharField(max_length=100, blank=True)
     updated_at = models.DateTimeField(auto_now=True)
+    price_type = models.CharField(max_length=10, choices=STATUS1, default='IQD')
 
     class Meta:
         verbose_name_plural = 'فاتورة البيع'
@@ -179,6 +185,7 @@ class Item(models.Model):
 
         ('شراء', 'شراء'),
         ('قسط', 'قسط'),
+
     )
     item_code = models.CharField(max_length=50)
     name = models.CharField(max_length=255)

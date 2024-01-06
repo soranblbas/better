@@ -75,8 +75,7 @@
                                         <td>{{ i.sub_total }}</td>
                                         {#                                                                                <td>{{ i.discount_type }}</td>#}
                                         <td>{{ i.discount_value }}</td>
-                                        <td>${{ i.total_amt }}</td>
-
+                                        <td>{{ i.total_amt }} {{ i.sales_invoice.price_type }}</td>
                                         <br>
                                     </tr>
                                 {% endfor %}
@@ -175,33 +174,33 @@
                         {#                            </div>#}
                         {#                        </div>#}
                         <br><br><br><br><br><br><br><br><br><br>
-<style>
-    .watermark {
-        position: fixed;
-        bottom: 0; /* Adjust this value to create more space between the watermark and the bottom footer */
-        left: 0;
-        width: 100%;
-        text-align: center;
-        font-size: 12px;
-        line-height: 1.2;
-        color: rgba(0, 0, 255, 0.5); /* Blue color with reduced opacity */
-        font-weight: bold; /* Make the text bold */
-        z-index: -1;
-    }
+                        <style>
+                            .watermark {
+                                position: fixed;
+                                bottom: 0; /* Adjust this value to create more space between the watermark and the bottom footer */
+                                left: 0;
+                                width: 100%;
+                                text-align: center;
+                                font-size: 12px;
+                                line-height: 1.2;
+                                color: rgba(0, 0, 255, 0.5); /* Blue color with reduced opacity */
+                                font-weight: bold; /* Make the text bold */
+                                z-index: -1;
+                            }
 
-    /* Add this style to ensure that the footer is pushed down */
-    .footer-padding {
-        height: 120px; /* Adjust this value to match the height of your footer */
-    }
-</style>
+                            /* Add this style to ensure that the footer is pushed down */
+                            .footer-padding {
+                                height: 120px; /* Adjust this value to match the height of your footer */
+                            }
+                        </style>
 
-<!-- Add a spacer div to push content down when necessary -->
-<div class="footer-padding"></div>
+                        <!-- Add a spacer div to push content down when necessary -->
+                        <div class="footer-padding"></div>
 
-<div class="watermark">
-    لتركيب وتجميع الطباخات Work Fitness - معمل - ‎0750 113 1331 - 07504696061 - 07734030330 - 0750 4030330‏ - العنوان: أربيل - طريق كوير
-</div>
-
+                        <div class="watermark">
+                            لتركيب وتجميع الطباخات Work Fitness - معمل - ‎0750 113 1331 - 07504696061 - 07734030330 -
+                            0750 4030330‏ - العنوان: أربيل - طريق كوير
+                        </div>
 
 
                     </div>
