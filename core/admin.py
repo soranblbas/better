@@ -194,7 +194,7 @@ admin.site.register(OpeningBalance)
 admin.site.register(Account)
 admin.site.register(ChartOfAccounts)
 admin.site.register(Transaction)
-admin.site.register(TotalPaidAmount)
+# admin.site.register(TotalPaidAmount)
 admin.site.register(SalesRepresentative)
 
 
