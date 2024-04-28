@@ -47,7 +47,8 @@ class SalesRepresentative(models.Model):
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        verbose_name_plural = 'المندوب'
 # Customer
 class Customer(models.Model):
     customer_name = models.CharField(max_length=50, blank=True)
@@ -525,14 +526,16 @@ class ChartOfAccounts(models.Model):
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        verbose_name_plural = ' اسم الحساب'
 class Account(models.Model):
     chart_of_account = models.ForeignKey(ChartOfAccounts, on_delete=models.CASCADE, verbose_name="القائمة")
     name = models.CharField(max_length=100, verbose_name="اسم الحساب")
 
     def __str__(self):
         return self.name
-
+    class Meta:
+        verbose_name_plural = 'الحساب'
 class TotalPaidAmount(models.Model):
     total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     def __str__(self):
@@ -561,7 +564,8 @@ class TotalPaidAmount(models.Model):
             if total_paid_amount.total_amount < 0:
                 total_paid_amount.total_amount = 0
             total_paid_amount.save()
-
+    class Meta:
+        verbose_name_plural = 'اجمال الدفع'
 class Transaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="الحساب")
     amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="المبلغ")
@@ -573,3 +577,5 @@ class Transaction(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)  # Save the transaction first
         TotalPaidAmount.deduct_amount(self.amount)  # Deduct the transaction amount from the total paid amount
+    class Meta:
+        verbose_name_plural = 'تحويل فلوس'
