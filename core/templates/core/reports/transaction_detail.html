@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <style>
+        table,
+        th,
+        td {
+            border: 0.5px solid;
+            direction: rtl;
+            text-align: center;
+        }
+
+        th {
+            text-align: center !important;
+        }
+
+    </style>
+
+    <h2>ملخص كشف صندوق</h2>
+    <table id="exampletransaction" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+            <tr>
+                <th>اسم العميل</th>
+                <th>م.فلوس</th>
+                <th> التاريخ</th>
+                    <th> رقم الوصل</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in t_all %}
+                <tr>
+                    <td>{{ t.account }}</td>
+                    <td>{{ t.amount }}</td>
+                    <td>{{ t.date }}</td>
+                    <td>{{ t.id }}</td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <th></th>
+            <th style="background-color: #beecc8"></th>
+            <th style="background-color: #beecc8"></th>
+            <th style="background-color: #e8c3c7"></th>
+
+        </tfoot>
+    </table>
+{% endblock %}

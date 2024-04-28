@@ -26,12 +26,32 @@ def index(request):
 
     t_journal_entry = JournalEntry.objects.select_related().count()
     j_total_amount = JournalEntry.objects.values_list().aggregate(Sum('amount'))
+    def calculate_total_purchase_value():
+        # Sum up the total purchase amount for all items
+        total_purchase_value = PurchaseItem.objects.aggregate(total=models.Sum('total_amt'))['total']
+        return total_purchase_value or 0
+
+    def calculate_total_sales_value():
+        # Sum up the total sales amount for all items
+        total_sales_value = SaleItem.objects.aggregate(total=models.Sum('total_amt'))['total']
+        return total_sales_value or 0
+    def calculate_current_stock_money_balance():
+        # Calculate the total purchase value
+        total_purchase_value = calculate_total_purchase_value()
+
+        # Calculate the total sales value
+        total_sales_value = calculate_total_sales_value()
+
+        # Calculate the total current stock money balance
+        current_stock_money_balance = total_purchase_value - total_sales_value
+
+        return current_stock_money_balance
 
     context = {'t_sale_invoice': t_sale_invoice, 't_sale': t_sale,
                't_payment': t_payment, 't_purchase': t_purchase,
                't_p_sale': t_p_sale, 't_item': t_item, 't_customer': t_customer,
                't_total_payment': t_total_payment,
-               't_journal_entry': t_journal_entry, 'j_total_amount': j_total_amount}
+               't_journal_entry': t_journal_entry, 'j_total_amount': j_total_amount,'calculate_current_stock_money_balance':calculate_current_stock_money_balance}
 
     return render(request, 'core/index.html', context)
 
@@ -94,9 +114,30 @@ def payment_report(request):
 
 
 def stock_report(request):
+    def calculate_total_purchase_value():
+        # Sum up the total purchase amount for all items
+        total_purchase_value = PurchaseItem.objects.aggregate(total=models.Sum('total_amt'))['total']
+        return total_purchase_value or 0
+
+    def calculate_total_sales_value():
+        # Sum up the total sales amount for all items
+        total_sales_value = SaleItem.objects.aggregate(total=models.Sum('total_amt'))['total']
+        return total_sales_value or 0
+    def calculate_current_stock_money_balance():
+        # Calculate the total purchase value
+        total_purchase_value = calculate_total_purchase_value()
+
+        # Calculate the total sales value
+        total_sales_value = calculate_total_sales_value()
+
+        # Calculate the total current stock money balance
+        current_stock_money_balance = total_purchase_value - total_sales_value
+
+        return current_stock_money_balance
+        # Calculate the total current stock money balance
     stock_report = Inventory.objects.select_related()
 
-    context = {'stock_report': stock_report}
+    context = {'stock_report': stock_report,'calculate_current_stock_money_balance':calculate_current_stock_money_balance}
     return render(request, 'core/reports/stock_report.html', context)
 
     # def customer_balance(request):
@@ -120,7 +161,11 @@ def customer_balance(request):
     return render(request, 'core/reports/customer_balance.html', context)
 
 
+def opening_balance_report(request):
+    # Get all opening balances
+    opening_balances = OpeningBalance.objects.all()
 
+    return render(request, 'core/reports/opening_balance_report.html', {'opening_balances': opening_balances})
 def customer_total_report_summary(request):
     customer_ids = SaleItem.objects.values_list('sales_invoice__customer_name_id', flat=True).distinct()
     c_balance_report = {}
@@ -129,6 +174,7 @@ def customer_total_report_summary(request):
         customer = Customer.objects.get(id=customer_id)
         customer_name = customer.customer_name
         customer_mobile = customer.customer_mobile
+        sales_representative_name = customer.sales_representative.name if customer.sales_representative else None
 
         sale_items = SaleItem.objects.filter(sales_invoice__customer_name_id=customer_id)
         payments = Payment_Entry.objects.filter(sales_invoice__customer_name_id=customer_id).order_by('-payment_date')
@@ -157,7 +203,8 @@ def customer_total_report_summary(request):
             'balance_before_last_payment': balance_before_last_payment,
             'opening_balance': opening_balance,
             'final_balance': final_balance,
-            'phone_number': customer_mobile
+            'phone_number': customer_mobile,
+            'sales_representative_name': sales_representative_name  # Include sales representative's name
         }
 
     context = {'c_balance_report': c_balance_report}
@@ -231,7 +278,7 @@ def employee_detail(request, pk):
     return render(request, 'core/reports/employee_detail.html', context=context)
 
 
-from django.db.models import Sum
+from django.db.models import Sum, F
 
 
 def single_sale(request, pk_test):
@@ -296,3 +343,10 @@ def price_list(request):
 def attendance_list(request):
     attendances = Attendance.objects.all()
     return render(request, 'core/reports/attendance_list.html', {'attendances': attendances})
+
+def transaction_detail(request):
+    # Retrieve the transaction object from the database
+    t_all= Transaction.objects.select_related()
+
+    # Render the template with the transaction details
+    return render(request, 'core/reports/transaction_detail.html', {'t_all':t_all})

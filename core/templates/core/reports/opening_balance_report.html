@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <style>
+        table,
+        th,
+        td {
+            border: 0.5px solid;
+            direction: rtl;
+            text-align: center;
+        }
+
+        th {
+            text-align: center !important;
+        }
+
+    </style>
+
+    <h2>تقرير الرصيد الافتتاحي</h2>
+    <table id="example7" class="table table-striped" style="background-color: #68a7e5">
+
+        <thead>
+            <tr>
+                <th>اسم العميل</th>
+                <th>رصيد افتتاحي</th>
+                <th>تاريخ الرصيد</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for opening_balance in opening_balances %}
+                <tr>
+                    <td>{{ opening_balance.customer.customer_name }}</td>
+                    <td>{{ opening_balance.balance_amount }}</td>
+                    <td>{{ opening_balance.date_created }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -33,6 +33,7 @@
                 <th>الرصيد النهائي</th>
                 <th>موبايل</th>
                 <th>رصيد افتتاحي</th>
+                <th>المندوب</th> <!-- Include the sales representative's name -->
             </tr>
         </thead>
         <tbody>
@@ -47,10 +48,12 @@
                     <td>{{ data.final_balance }}</td>
                     <td>{{ data.phone_number }}</td>
                     <td>{{ data.opening_balance }}</td>
+                    <td>{{ data.sales_representative_name }}</td> <!-- Display the sales representative's name -->
                 </tr>
             {% endfor %}
         </tbody>
         <tfoot>
+            <th></th>
             <th></th>
             <th style="background-color: #beecc8"></th>
             <th style="background-color: #beecc8"></th>

@@ -31,11 +31,10 @@ class SalesItem(admin.TabularInline):
 
     autocomplete_fields = ['item']
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "item":
-            kwargs["queryset"] = Item.objects.exclude(price_list='شراء')
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "item":
+    #         kwargs["queryset"] = Item.objects.exclude(price_list='شراء')
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     readonly_fields = ('sub_total',)
 
@@ -50,13 +49,12 @@ class ProfileAdmin(admin.ModelAdmin):
     # def show_sales_total(self, obj):
     #     total_sales = sum(sale.total_amt for sale in obj.sales.all())
     #     return format_html('<b>{}</b>', total_sales)
+    search_fields = ['customer_name__customer_name']  # Add this line for customer name search
 
     list_display = (
         'invoice_number', 'customer_name', 'total_sub_amount', 'total_discount_amount', 'total_sales_amount', 'date',
         'updated_at',)
     list_filter = ('status',)
-
-
 
     def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
         if request.method == 'POST':
@@ -70,6 +68,7 @@ class ProfileAdmin(admin.ModelAdmin):
         else:
             return super().changeform_view(request, object_id=object_id, form_url=form_url, extra_context=extra_context)
 
+
 class PurchasesItem(admin.TabularInline):
     model = PurchaseItem
     extra = 1
@@ -77,11 +76,12 @@ class PurchasesItem(admin.TabularInline):
 
     autocomplete_fields = ['item']
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "item":
-            kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'قسط', 'جملة'])
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if db_field.name == "item":
+    #         kwargs["queryset"] = Item.objects.exclude(price_list__in=['مفرد', 'قسط', 'جملة'])
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
     #
+
 
 @admin.register(Purchase)
 class ProfileAdmin(admin.ModelAdmin):
@@ -127,7 +127,7 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Inventory)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('item','warehouse', 'purchase', 'sale', 'pur_qty', 'sale_qty', 'return_qty', 'total_bal_qty')
+    list_display = ('item', 'warehouse', 'purchase', 'sale', 'pur_qty', 'sale_qty', 'return_qty', 'total_bal_qty')
     list_display_links = ['purchase', 'sale', ]
     search_fields = ['item__item_code', 'item__name', 'warehouse__name']
 
@@ -166,7 +166,7 @@ class CustomerPagination(admin.ModelAdmin):
 
 @admin.register(Payment_Entry)
 class CustomerPagination(admin.ModelAdmin):
-    list_display = ('sales_invoice', 'paid_amount', 'q_type', 'payment_date', 'note','discount_amount')
+    list_display = ('sales_invoice', 'paid_amount', 'q_type', 'payment_date', 'note', 'discount_amount')
     list_display_links = ['sales_invoice', ]
     list_filter = ('sales_invoice',)
 
@@ -189,9 +189,13 @@ admin.site.register(Vendor)
 admin.site.register(Unit)
 admin.site.register(Warehouse)
 
-
 admin.site.register(JournalEntry)
 admin.site.register(OpeningBalance)
+admin.site.register(Account)
+admin.site.register(ChartOfAccounts)
+admin.site.register(Transaction)
+admin.site.register(TotalPaidAmount)
+admin.site.register(SalesRepresentative)
 
 
 admin.site.site_header = "Better Cooking Admin"

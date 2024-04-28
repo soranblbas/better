@@ -15,6 +15,8 @@ urlpatterns = [
     path('stock_report', views.stock_report, name="stock_report"),
     # path('customer_balance', views.customer_balance, name="customer_balance"),
     path('total_customer_summary_report', views.customer_total_report_summary, name="total_customer_summary_report"),
+    path('opening_balance_report/', views.opening_balance_report, name='opening_balance_report'),
+
     path('item-balance', views.item_balance, name='item_balance'),
     path('employees/', views.employee_list, name='employee_list'),
     # path('employees/<int:pk>/', views.employee_detail, name='employee_detail'),
@@ -23,5 +25,6 @@ urlpatterns = [
     path('user_profile/', views.user_profile, name='user_profile'),
     path('price_list/', views.price_list, name='price_list'),
     path('attendance_list/', views.attendance_list, name='attendance_list'),
+    path('transaction/', views.transaction_detail, name='transaction_detail'),
 
 ]

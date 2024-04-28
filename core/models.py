@@ -37,12 +37,25 @@ class Vendor(models.Model):
         return self.full_name
 
 
+class SalesRepresentative(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField(unique=True,blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    address = models.TextField(blank=True)
+    joining_date = models.DateField(null=True, blank=True)
+    department = models.CharField(max_length=100, blank=True)
+
+    def __str__(self):
+        return self.name
+
 # Customer
 class Customer(models.Model):
     customer_name = models.CharField(max_length=50, blank=True)
     customer_mobile = models.CharField(max_length=50, blank=True)
     customer_address = models.TextField(blank=True)
     city = models.CharField(max_length=50, blank=True)
+    sales_representative = models.ForeignKey(SalesRepresentative, on_delete=models.SET_NULL, null=True, blank=True)
+
     note = models.TextField(blank=True)
 
     class Meta:
@@ -155,12 +168,15 @@ class Payment_Entry(models.Model):
 
         # Apply discount if provided
         self.paid_amount -= self.discount_amount
+        TotalPaidAmount.update_total_amount(self.paid_amount)  # Update the total paid amount
+
 
         super().save(*args, **kwargs)
-
-
-# Sales Invoice
-
+    @staticmethod
+    def total_paid_amount():
+        # Aggregate the paid_amount across all Payment_Entry instances
+        total_amount = Payment_Entry.objects.aggregate(total=models.Sum('paid_amount'))['total']
+        return total_amount or 0
 
 # Unit
 
@@ -180,11 +196,11 @@ class Unit(models.Model):
 # Item Details
 class Item(models.Model):
     PRICELIST = (
-        ('مفرد', 'مفرد'),
+        # ('مفرد', 'مفرد'),
         ('جملة', 'جملة'),
-
-        ('شراء', 'شراء'),
-        ('قسط', 'قسط'),
+        #
+        # ('شراء', 'شراء'),
+        # ('قسط', 'قسط'),
 
     )
     item_code = models.CharField(max_length=50)
@@ -229,14 +245,12 @@ class Purchase(models.Model):
         return total_purchase_amount or 0
 
 
-# payment entry
 
 
 # Sales Item
 class SaleItem(models.Model):
     sales_invoice = models.ForeignKey(SaleInvoice, on_delete=models.CASCADE)
-    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,default="Test")  # Add this field
-
+    warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, default="Test")
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     qty = models.PositiveSmallIntegerField(default=1)
     total_amt = models.FloatField(editable=False, default=0)
@@ -244,13 +258,18 @@ class SaleItem(models.Model):
     is_returned = models.BooleanField(default=False)
     sub_total = models.FloatField(validators=[MinValueValidator(0.01)], default=0)
     discount_type = models.CharField(max_length=30, choices=(('amount', 'Amount'),
-                                                             ('percentage', 'Percentage')
-                                                             ), default='percentage', editable=False)
+                                                             ('percentage', 'Percentage')),
+                                      default='percentage', editable=False)
     discount_value = models.FloatField(blank=True, null=True, verbose_name='Discount Percentage')
+    modified_price = models.FloatField(blank=True, null=True, verbose_name='Modified Price')  # Add this field
 
     def save(self, *args, **kwargs):
+        if self.modified_price is not None:
+            item_price = self.modified_price  # Use modified price if available
+        else:
+            item_price = self.item.price  # Otherwise, use original item price
 
-        self.sub_total = self.item.price * self.qty
+        self.sub_total = item_price * self.qty
 
         if self.discount_type == 'percentage' and self.discount_value is not None:
             discount = self.sub_total * self.discount_value / 100
@@ -260,15 +279,15 @@ class SaleItem(models.Model):
         self.total_amt = self.sub_total - discount
 
         if self.is_returned and self.sales_invoice.status == "المردود":
-            self.total_amt = -self.qty * self.item.price
+            self.total_amt = -self.qty * item_price
         # else:
-        #     self.total_amt = self.qty * self.item.price
+        #     self.total_amt = self.qty * item_price
 
         super().save(*args, **kwargs)
 
         try:
-
-            inventory = Inventory.objects.filter(item__item_code=self.item.item_code, warehouse__name=self.warehouse.name).latest('id')
+            inventory = Inventory.objects.filter(item__item_code=self.item.item_code,
+                                                 warehouse__name=self.warehouse.name).latest('id')
         except Inventory.DoesNotExist:
             raise ValueError(f"{self.item} is not in stock")
 
@@ -499,3 +518,58 @@ class OpeningBalance(models.Model):
         return f"Opening Balance for {self.customer.customer_name}: {self.balance_amount} ({self.date_created})"
     class Meta:
         verbose_name_plural = ' رصيد افتتاحي'
+
+
+class ChartOfAccounts(models.Model):
+    name = models.CharField(max_length=100, verbose_name="اسم الحساب")
+
+    def __str__(self):
+        return self.name
+
+class Account(models.Model):
+    chart_of_account = models.ForeignKey(ChartOfAccounts, on_delete=models.CASCADE, verbose_name="القائمة")
+    name = models.CharField(max_length=100, verbose_name="اسم الحساب")
+
+    def __str__(self):
+        return self.name
+
+class TotalPaidAmount(models.Model):
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    def __str__(self):
+        return self.total_amount
+    @classmethod
+    def get_total_amount(cls):
+        total_paid_amount = cls.objects.first()
+        if total_paid_amount:
+            return total_paid_amount.total_amount
+        return 0
+
+    @classmethod
+    def update_total_amount(cls, amount):
+        total_paid_amount = cls.objects.first()
+        if total_paid_amount:
+            total_paid_amount.total_amount = float(total_paid_amount.total_amount) + amount
+            total_paid_amount.save()
+        else:
+            cls.objects.create(total_amount=amount)
+
+    @classmethod
+    def deduct_amount(cls, amount):
+        total_paid_amount = cls.objects.first()
+        if total_paid_amount:
+            total_paid_amount.total_amount -= amount
+            if total_paid_amount.total_amount < 0:
+                total_paid_amount.total_amount = 0
+            total_paid_amount.save()
+
+class Transaction(models.Model):
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name="الحساب")
+    amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="المبلغ")
+    date = models.DateField(auto_now_add=True, verbose_name="التاريخ")
+
+    def __str__(self):
+        return f"{self.account} - {self.amount}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # Save the transaction first
+        TotalPaidAmount.deduct_amount(self.amount)  # Deduct the transaction amount from the total paid amount

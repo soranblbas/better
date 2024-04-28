@@ -1,92 +1,84 @@
 {% extends 'core/base.html' %}
 
-
 {% block content %}
     <br>
     <br> <br>
     <style>
         table, th, td {
             border: 0.5px solid;
-                        direction: rtl;
+            direction: rtl;
             text-align: center;
-
         }
 
         th {
             text-align: center !important;
         }
-
     </style>
 
     <form class="form-a">
-
-
-        From: <input type="date" value={{ myFilter.form.max_date }}</input>
-        To: <input type="date" value={{ myFilter.form.min_date }}</input>
+        From: <input type="date" value="{{ myFilter.form.max_date }}"></input>
+        To: <input type="date" value="{{ myFilter.form.min_date }}"></input>
         <button type="submit" class="btn btn-b">Search</button>
-
-
     </form>
-    <h2 class="text-center"> ملخص المبيعات </h2>
+
+    <h2 class="text-center">ملخص المبيعات</h2>
     <table id="example1" class="table table-striped" style="background-color: #68a7e5">
-
         <thead>
-
-        <tr>
-
-
-            <th>رقم الوصل</th>
-            <th>اسم العميل</th>
-            <th>الحالة</th>
-            <th>اسم المادة</th>
-            <th>نوع السعر</th>
-            <th> السعر</th>
-            <th>العدد</th>
-            <th>المجموع</th>
-            <th>المردود</th>
-            <th>التاريخ</th>
-            <th>الملاحظة</th>
-
-
-        </tr>
-        </thead>
-        <tbody>
-        {% for i in  s_reports %}
-
             <tr>
-                <td><a href="{% url 'single_sale' i.sales_invoice.id %}">{{ i.sales_invoice.invoice_number }}</a></td>
-                <td>{{ i.sales_invoice.customer_name }}</td>
-                <td>{{ i.sales_invoice.status }}</td>
-                <td>{{ i.item.name }}</td>
-                <td>{{ i.item.price_list }}</td>
+                <th>رقم الوصل</th>
+                <th>اسم العميل</th>
+                <th>الحالة</th>
+                <th>اسم المادة</th>
+                <th>نوع السعر</th>
+                <th>السعر</th>
+                <th>العدد</th>
+                <th>المجموع</th>
+                <th>المردود</th>
+                <th>التاريخ</th>
+                                <th>الملاحظة</th>
+{#                <th>المندوب</th> <!-- Include the sales representative's name -->#}
 
-                <td>{{ i.item.price }}</td>
-                <td>{{ i.qty }}</td>
-                <td>{{ i.total_amt }}</td>
-                <td>{{ i.is_returned }}</td>
-                <td>{{ i.sale_date }}</td>
-               <td>{{ i.sales_invoice.note }}</td>
+
 
 
             </tr>
-        {% endfor %}
+        </thead>
+        <tbody>
+            {% for i in s_reports %}
+                <tr>
+                    <td><a href="{% url 'single_sale' i.sales_invoice.id %}">{{ i.sales_invoice.invoice_number }}</a></td>
+                    <td>{{ i.sales_invoice.customer_name }}</td>
+                    <td>{{ i.sales_invoice.status }}</td>
+                    <td>{{ i.item.name }}</td>
+                    <td>{{ i.item.price_list }}</td>
+                    <td>
+                        {% if i.modified_price %}
+                            {{ i.modified_price }}
+                        {% else %}
+                            {{ i.item.price }}
+                        {% endif %}
+                    </td>
+                    <td>{{ i.qty }}</td>
+                    <td>{{ i.total_amt }}</td>
+                    <td>{{ i.is_returned }}</td>
+                    <td>{{ i.sale_date }}</td>
+                    <td>{{ i.sales_invoice.note }}</td>
+{#                <td>{{ i.sales_invoice.customer_name.sales_representative }}</td>#}
+                </tr>
+            {% endfor %}
         </tbody>
         <tfoot>
-
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th style="background-color: #f6aab2"></th>
-        <th style="background-color: #9cee99"></th>
-        <th></th>
-        <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th style="background-color: #f6aab2"></th>
+            <th style="background-color: #9cee99"></th>
+            <th></th>
+            <th></th>
+                    <th></th>
 
         </tfoot>
-
-
     </table>
-
-
 {% endblock %}

@@ -40,7 +40,7 @@
             <th>التاريخ</th>
             <th>الملاحضة</th>
 
-            <th>التحفيظ</th>
+            <th>التخفيظ</th>
 
 
         </tr>
@@ -52,7 +52,7 @@
                 <td>{{ i.sales_invoice.customer_name }}</td>
                 <td>{{ i.invoice_number }}</td>
                 <td>{{ i.sales_invoice }}</td>
-                <td>{{ i.paid_amount }}</td>
+                    <td>{{ i.paid_amount|floatformat:"1" }}</td>  <!-- Use floatformat filter -->
                 <td>{{ i.payment_date }}</td>
                 <td>{{ i.note }}</td>
                             <td>{{ i.discount_amount }}</td>
