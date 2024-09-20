@@ -88,10 +88,10 @@ WSGI_APPLICATION = "better.wsgi.application"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd2ba4gfrqnkpq4',
-        'USER': 'bliicstuxcjskh',
-        'PASSWORD': 'a3f554f3dbd79a48a2496afa68a89867461c3c14a84b70deb3255a60b1968a4a',
-        'HOST': 'ec2-3-83-61-239.compute-1.amazonaws.com',
+        'NAME': 'd29e3dst0k1utn',
+        'USER': 'udqsb3nvgavool',
+        'PASSWORD': 'p243274f75bc165659ff7c5f70bdaed5e8ff2bfc5af68f7b9431890f704865ed1',
+        'HOST': 'c67tgmqjrqj9ns.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
